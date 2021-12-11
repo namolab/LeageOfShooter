@@ -29,6 +29,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+
+	void StartCrouch();
+
+	void StopCrouch();
+
 protected:
 
 	/** Resets HMD orientation in VR. */

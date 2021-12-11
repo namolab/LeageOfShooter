@@ -14,4 +14,11 @@ class LEAGEOFSHOOTER_API AShootPlayerController : public ABaseController
 {
 	GENERATED_BODY()
 	
+public:
+	AShootPlayerController();
+
+	virtual void PlayerTick(float DeltaTime) override;
+
+private:
+	void UpdateListener();
 };

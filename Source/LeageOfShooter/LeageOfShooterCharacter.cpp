@@ -67,6 +67,7 @@ void ALeageOfShooterCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAxis("TurnRate", this, &ALeageOfShooterCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALeageOfShooterCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ALeageOfShooterCharacter::StartCrouch);
 
 	// handle touch devices
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &ALeageOfShooterCharacter::TouchStarted);
@@ -136,5 +137,40 @@ void ALeageOfShooterCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
+	}
+}
+
+void ALeageOfShooterCharacter::StartCrouch()
+{
+	//if (!IsValid(OwnerCharacter))
+	//{
+	//	return;
+	//}
+
+	if (!GetCharacterMovement()->IsCrouching() && !GetCharacterMovement()->IsFalling())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StartCrouch"));
+		//GetCharacterMovement()->bWantsToCrouch = true;
+		GetCharacterMovement()->Crouch();
+	}
+	else
+	{
+		GetCharacterMovement()->UnCrouch();
+	}
+}
+
+void ALeageOfShooterCharacter::StopCrouch()
+{
+	//if (!IsValid(OwnerCharacter))
+	//{
+	//	return;
+	//}
+
+	if (GetCharacterMovement()->IsCrouching())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StopCrouch"));
+		GetCharacterMovement()->bWantsToCrouch = false;
+
+		//OwnerCharacter->GetCharacterMovement()->UnCrouch();
 	}
 }
