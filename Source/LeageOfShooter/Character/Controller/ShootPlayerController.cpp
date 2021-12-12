@@ -17,6 +17,20 @@ void AShootPlayerController::PlayerTick(float DeltaTime)
 	UpdateListener();
 }
 
+void AShootPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (IsLocalController())
+	{
+		if (MainWidgetClass != nullptr)
+		{
+			MainWidget = CreateWidget<UUserWidget>(this, MainWidgetClass);
+			MainWidget->AddToViewport();
+		}
+	}
+}
+
 void AShootPlayerController::UpdateListener()
 {
 	if (IsValid(GetWorld()) && IsLocalController())

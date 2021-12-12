@@ -14,4 +14,11 @@ class LEAGEOFSHOOTER_API ARangeWeapon : public AWeapon
 {
 	GENERATED_BODY()
 	
+public:
+	// Sets default values for this actor's properties
+	ARangeWeapon();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };

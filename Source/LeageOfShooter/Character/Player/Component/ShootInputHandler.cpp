@@ -6,31 +6,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "LeageOfShooter/Character/Player/PlayerCharacter.h"
 
-// Sets default values for this component's properties
+
 UShootInputHandler::UShootInputHandler()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	//PrimaryComponentTick.bCanEverTick = true;
-
-	// set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
+	
 }
 
-// Called when the game starts
+
 void UShootInputHandler::BeginPlay()
 {
 	Super::BeginPlay();
 }
-
-// Called every frame
-//void UShootInputHandler::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-//{
-//	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-//
-//	// ...
-//}
 
 void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputComponent* InputComponent)
 {
@@ -53,14 +39,11 @@ void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputCo
 	InputHandler->BindAction("Sprint", IE_Pressed, this, &UShootInputHandler::StartSprint);
 	InputHandler->BindAction("Sprint", IE_Released, this, &UShootInputHandler::StopSprint);
 
-	InputHandler->BindAction("StartFire", IE_Pressed, this, &UShootInputHandler::FireWeapon);
+	InputHandler->BindAction("StartFire", IE_Pressed, this, &UShootInputHandler::FireButtonPressed);
+	InputHandler->BindAction("StartFire", IE_Released, this, &UShootInputHandler::FireButtonReleased);
 
-	//InputComponentRef->BindAction("ChangeToPistol", EInputEvent::IE_Pressed, PlayerCharacterRef.Get(), &APlayerCharacter::ChangeToPistol);
-	//InputComponentRef->BindAction("ChangeToRifle", EInputEvent::IE_Pressed, PlayerCharacterRef.Get(), &APlayerCharacter::ChangeToRifle);
-	//InputComponentRef->BindAction("ChangeToNone", EInputEvent::IE_Pressed, PlayerCharacterRef.Get(), &APlayerCharacter::ChangeToNone);
-	//InputComponentRef->BindAction("IronSights", EInputEvent::IE_Pressed, PlayerCharacterRef.Get(), &APlayerCharacter::ONIronSights);
-	//InputComponentRef->BindAction("IronSights", EInputEvent::IE_Released, PlayerCharacterRef.Get(), &APlayerCharacter::OFFIronSights);
-	//InputComponentRef->BindAction("Shoot", EInputEvent::IE_Pressed, PlayerCharacterRef.Get(), &APlayerCharacter::Shoot);
+	InputHandler->BindAction("AimingButton", IE_Pressed, this, &UShootInputHandler::AimingButtonPressed);
+	InputHandler->BindAction("AimingButton", IE_Released, this, &UShootInputHandler::AimingButtonReleased);
 }
 
 void UShootInputHandler::MoveForward(float Value)
@@ -85,9 +68,15 @@ void UShootInputHandler::MoveForward(float Value)
 			{
 				Value *= 0.5f;
 			}
-			else if (ShoPlayerCharacter->MoveState == EMovementState::Crouch || OwnerCharacter->GetCharacterMovement()->IsCrouching())
+
+			if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
 			{
-				Value *= 0.3f;
+				Value *= 0.4f;
+			}
+
+			if (ShoPlayerCharacter->GetIsAiming())
+			{
+				Value *= 0.8f;
 			}
 		}
 
@@ -117,9 +106,15 @@ void UShootInputHandler::MoveRight(float Value)
 			{
 				Value *= 0.5f;
 			}
-			else if (ShoPlayerCharacter->MoveState == EMovementState::Crouch || OwnerCharacter->GetCharacterMovement()->IsCrouching())
+
+			if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
 			{
-				Value *= 0.3f;
+				Value *= 0.4f;
+			}
+
+			if (ShoPlayerCharacter->GetIsAiming())
+			{
+				Value *= 0.8f;
 			}
 		}
 
@@ -135,8 +130,11 @@ void UShootInputHandler::TurnAtRate(float Rate)
 	{
 		return;
 	}
-	// calculate delta for this frame from the rate information
-	OwnerCharacter->AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		OwnerCharacter->AddControllerYawInput(Rate * ShoPlayerCharacter->BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void UShootInputHandler::LookUpAtRate(float Rate)
@@ -145,8 +143,11 @@ void UShootInputHandler::LookUpAtRate(float Rate)
 	{
 		return;
 	}
-	// calculate delta for this frame from the rate information
-	OwnerCharacter->AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		OwnerCharacter->AddControllerPitchInput(Rate * ShoPlayerCharacter->BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void UShootInputHandler::Turn(float Rate)
@@ -155,7 +156,21 @@ void UShootInputHandler::Turn(float Rate)
 	{
 		return;
 	}
-	OwnerCharacter->AddControllerYawInput(Rate);
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		float TurnScaleFactor = 0.0f;
+		if (ShoPlayerCharacter->GetIsAiming())
+		{
+			TurnScaleFactor = ShoPlayerCharacter->MouseAimingTurnRate;
+		}
+		else
+		{
+			TurnScaleFactor = ShoPlayerCharacter->MouseHipTurnRate;
+		}
+		OwnerCharacter->AddControllerYawInput(Rate * TurnScaleFactor);
+	}
+
 }
 
 void UShootInputHandler::LookUp(float Rate)
@@ -164,7 +179,20 @@ void UShootInputHandler::LookUp(float Rate)
 	{
 		return;
 	}
-	OwnerCharacter->AddControllerPitchInput(Rate);
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		float LookUpScaleFactor = 0.0f;
+		if (ShoPlayerCharacter->GetIsAiming())
+		{
+			LookUpScaleFactor = ShoPlayerCharacter->MouseAimingLookUpRate;
+		}
+		else
+		{
+			LookUpScaleFactor = ShoPlayerCharacter->MouseHipLookUpRate;
+		}
+		OwnerCharacter->AddControllerPitchInput(Rate * LookUpScaleFactor);
+	}
 }
 
 void UShootInputHandler::StartJump()
@@ -194,11 +222,6 @@ void UShootInputHandler::StartCrouch()
 
 	if (!OwnerCharacter->GetCharacterMovement()->IsCrouching() && !OwnerCharacter->GetCharacterMovement()->IsFalling())
 	{
-		if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-		{
-			ShoPlayerCharacter->MoveState = EMovementState::Crouch;
-		}
-
 		OwnerCharacter->GetCharacterMovement()->bWantsToCrouch = true;
 	}
 }
@@ -212,11 +235,6 @@ void UShootInputHandler::StopCrouch()
 
 	if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
 	{
-		if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-		{
-			ShoPlayerCharacter->MoveState = EMovementState::Walk;
-		}
-
 		OwnerCharacter->GetCharacterMovement()->bWantsToCrouch = false;
 	}	
 }
@@ -231,6 +249,7 @@ void UShootInputHandler::StartSprint()
 	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
 	{
 		ShoPlayerCharacter->MoveState = EMovementState::Run;
+
 	}
 }
 
@@ -244,10 +263,11 @@ void UShootInputHandler::StopSprint()
 	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
 	{
 		ShoPlayerCharacter->MoveState = EMovementState::Walk;
+
 	}
 }
 
-void UShootInputHandler::FireWeapon()
+void UShootInputHandler::FireButtonPressed()
 {
 	if (!IsValid(OwnerCharacter))
 	{
@@ -256,6 +276,37 @@ void UShootInputHandler::FireWeapon()
 
 	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
 	{
-		ShoPlayerCharacter->FireWeapon();
+		//ShoPlayerCharacter->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(FGameplayTagContainer(FGameplayTag::RequestGameplayTag(FName("Ability.Skill.Fire"))));
+		ShoPlayerCharacter->FireButtonPressed();
+	}
+
+}
+
+void UShootInputHandler::FireButtonReleased()
+{
+	if (!IsValid(OwnerCharacter))
+	{
+		return;
+	}
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		ShoPlayerCharacter->FireButtonReleased();
+	}
+}
+
+void UShootInputHandler::AimingButtonPressed()
+{
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		ShoPlayerCharacter->AimingButtonPressed();
+	}
+}
+
+void UShootInputHandler::AimingButtonReleased()
+{
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	{
+		ShoPlayerCharacter->AimingButtonReleased();
 	}
 }

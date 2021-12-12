@@ -15,11 +15,31 @@ class LEAGEOFSHOOTER_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
+	UPlayerAnimInstance();
+
 	UFUNCTION(BlueprintCallable)
 	void UpdateAnimationProperties(float DeltaTime);
 
 	virtual void NativeInitializeAnimation() override;
 
+	UFUNCTION(BlueprintPure)
+	float GetYawOffset() const { return RootYawOffset; }
+
+	UFUNCTION(BlueprintPure)
+	float GetRootPitch() const { return RootPitch; }
+
+protected:
+	void UpdateTurnInPlace();
+
+	UFUNCTION(Server, Reliable)
+	void CS_SetSettingValue(float RootYawOffsetParam, float RootPitchParam);
+
+protected:
+	UPROPERTY(Replicated)
+	float RootYawOffset;
+
+	UPROPERTY(Replicated)
+	float RootPitch;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
@@ -33,4 +53,22 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool bIsAccelerating;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float MovementOffsetYaw;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float LastMovementOffsetYaw;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	bool bAiming;
+
+	float CharacterYaw;
+
+	float CharacterYawLastFrame;
+
+	float RotationCurve;
+
+	float RotationCurveLastFrame;
+
 };

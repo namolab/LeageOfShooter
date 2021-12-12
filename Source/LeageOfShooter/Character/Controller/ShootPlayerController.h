@@ -19,6 +19,17 @@ public:
 
 	virtual void PlayerTick(float DeltaTime) override;
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	void UpdateListener();
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget")
+	TSubclassOf<class UUserWidget> MainWidgetClass;
+
+private:
+	UPROPERTY(Transient)
+	class UUserWidget* MainWidget;
 };
