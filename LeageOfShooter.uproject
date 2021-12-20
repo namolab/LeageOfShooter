@@ -1,25 +1,3 @@
-{
-	"FileVersion": 3,
-	"EngineAssociation": "4.27",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "LeageOfShooter",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"UMG",
-				"Engine",
-				"GameplayAbilities",
-				"AIModule"
-			]
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "GameplayAbilities",
-			"Enabled": true
-		}
-	]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:249e64c5dafae3ce61a6ba0db4ba821c207528bb0c6e177abe0df2e6d0712ccf
+size 397
