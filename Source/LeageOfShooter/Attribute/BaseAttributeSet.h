@@ -20,10 +20,26 @@ class LEAGEOFSHOOTER_API UBaseAttributeSet : public UAttributeSet
 	
 public:
 	UBaseAttributeSet();
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
+	void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	void Initialize(class ABaseCharacter* Owner);
+
+	UFUNCTION()
+	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
+	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
+	UFUNCTION()
+	virtual void OnRep_Mana(const FGameplayAttributeData& OldMana);
+	UFUNCTION()
+	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
+	UFUNCTION()
+	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
+	UFUNCTION()
+	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina);
+	UFUNCTION()
+	virtual void OnRep_FireDamage(const FGameplayAttributeData& OldFireDamage);
+	UFUNCTION()
+	virtual void OnRep_Armor(const FGameplayAttributeData& OldArmor);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attributes", ReplicatedUsing = OnRep_Health)
@@ -57,24 +73,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attributes", ReplicatedUsing = OnRep_Armor)
 	FGameplayAttributeData Armor;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Armor);
-
-public:
-	UFUNCTION()
-	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
-	UFUNCTION()
-	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
-	UFUNCTION()
-	virtual void OnRep_Mana(const FGameplayAttributeData& OldMana);
-	UFUNCTION()
-	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana);
-	UFUNCTION()
-	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
-	UFUNCTION()
-	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina);
-	UFUNCTION()
-	virtual void OnRep_FireDamage(const FGameplayAttributeData& OldFireDamage);
-	UFUNCTION()
-	virtual void OnRep_Armor(const FGameplayAttributeData& OldArmor);
-
-	void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };
