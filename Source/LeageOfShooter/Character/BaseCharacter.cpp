@@ -5,12 +5,24 @@
 
 ABaseCharacter::ABaseCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComp");
 	AbilitySystemComp->SetIsReplicated(true);
 
 	AttributeSetComp = CreateDefaultSubobject<UBaseAttributeSet>("Attributes");
 	AbilitySystemComp->AddAttributeSetSubobject(AttributeSetComp);
+
+	DeadSectionName = FName(TEXT("Dead"));
+}
+
+void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (AbilitySystemComp && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "EAbilityInputID", static_cast<int32>(EAbilityInputID::Confirm), static_cast<int32>(EAbilityInputID::Cancel));
+		AbilitySystemComp->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
 }
 
 void ABaseCharacter::InitializeAbility()
@@ -87,23 +99,43 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-void ABaseCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	if (AbilitySystemComp && InputComponent)
+	for (int32 i = 0; i < DeadMontageSoft.Num(); i++)
 	{
-		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "EAbilityInputID", static_cast<int32>(EAbilityInputID::Confirm), static_cast<int32>(EAbilityInputID::Cancel));
-		AbilitySystemComp->BindAbilityActivationToInputComponent(InputComponent, Binds);
+		DeadMontage.Add(DeadMontageSoft[i].LoadSynchronous());
+	}
+
+	if (AbilitySystemComp)
+	{
+		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(AttributeSetComp->GetHealthAttribute()).AddUObject(this, &ABaseCharacter::OnHealthChangedFunc);
 	}
 }
 
+void ABaseCharacter::OnHealthChangedFunc(const FOnAttributeChangeData& Data)
+{
+	if (Data.NewValue <= 0.0f)
+	{
+		if (IsValid(GEngine))
+		{
+			GEngine->AddOnScreenDebugMessage(1, 6.0f, FColor::White, FString(TEXT("Die")));
+		}
 
+		Die();
+	}
+
+	CallHealthChanged();
+}
+
+void ABaseCharacter::Die()
+{
+
+}
+
+void ABaseCharacter::CallHealthChanged()
+{
+}
+
+void ABaseCharacter::ActorDestory()
+{
+	Destroy();
+}

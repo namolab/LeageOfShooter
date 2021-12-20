@@ -44,6 +44,15 @@ protected:
 	void AimingButtonPressed();
 	void AimingButtonReleased();
 
+	void InteractiveButtonPressed();
+	void InteractiveButtonReleased();
+
+	void DropButtonPressed();
+	void DropButtonReleased();
+
+	void ReloadButtonPressed();
+	void ReloadButtonReleased();
+
 public:	
 	void SetupInputHandler(class ABaseCharacter* MyCharacter, class UInputComponent* InputComponent);
 
@@ -52,5 +61,5 @@ private:
 	UInputComponent* InputHandler;
 
 	UPROPERTY(Transient)
-	class ABaseCharacter* OwnerCharacter;
+	class APlayerCharacter* OwnerCharacter;
 };

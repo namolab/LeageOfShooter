@@ -6,9 +6,7 @@
 #include "BaseController.h"
 #include "ShootPlayerController.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class LEAGEOFSHOOTER_API AShootPlayerController : public ABaseController
 {

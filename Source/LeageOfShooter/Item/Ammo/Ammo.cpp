@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TrollAI.h"
+#include "Ammo.h"
 
-ATrollAI::ATrollAI()
+AAmmo::AAmmo()
+	:Super()
 {
-
+	AmmoType = EAmmoType::AmmoAR;
 }

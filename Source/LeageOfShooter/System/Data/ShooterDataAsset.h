@@ -15,7 +15,6 @@ class LEAGEOFSHOOTER_API UShooterDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
 	
-
 	UPROPERTY(EditDefaultsOnly, Category = "ShooterDataCollection")
 	TSoftObjectPtr<UDataTable> CharacterTable;
 	
@@ -24,4 +23,7 @@ class LEAGEOFSHOOTER_API UShooterDataAsset : public UDataAsset
 	
 	UPROPERTY(EditDefaultsOnly, Category = "ShooterDataCollection")
 	TSoftObjectPtr<UDataTable> NoticeTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ShooterDataCollection")
+	TSoftObjectPtr<UDataTable> WeaponTable;
 };

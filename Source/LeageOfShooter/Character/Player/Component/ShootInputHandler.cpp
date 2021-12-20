@@ -12,7 +12,6 @@ UShootInputHandler::UShootInputHandler()
 	
 }
 
-
 void UShootInputHandler::BeginPlay()
 {
 	Super::BeginPlay();
@@ -21,7 +20,11 @@ void UShootInputHandler::BeginPlay()
 void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputComponent* InputComponent)
 {
 	InputHandler = InputComponent;
-	OwnerCharacter = MyCharacter;
+
+	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(MyCharacter))
+	{
+		OwnerCharacter = ShoPlayerCharacter;
+	}
 
 	InputHandler->BindAxis("MoveRight", this, &UShootInputHandler::MoveRight);
 	InputHandler->BindAxis("MoveForward", this, &UShootInputHandler::MoveForward);
@@ -44,269 +47,259 @@ void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputCo
 
 	InputHandler->BindAction("AimingButton", IE_Pressed, this, &UShootInputHandler::AimingButtonPressed);
 	InputHandler->BindAction("AimingButton", IE_Released, this, &UShootInputHandler::AimingButtonReleased);
+
+	InputHandler->BindAction("Interactive", IE_Pressed, this, &UShootInputHandler::InteractiveButtonPressed);
+	InputHandler->BindAction("Interactive", IE_Released, this, &UShootInputHandler::InteractiveButtonReleased);
+
+	InputHandler->BindAction("Reload", IE_Pressed, this, &UShootInputHandler::ReloadButtonPressed);
+	InputHandler->BindAction("Reload", IE_Released, this, &UShootInputHandler::ReloadButtonReleased);
+
+	InputHandler->BindAction("Drop", IE_Pressed, this, &UShootInputHandler::DropButtonPressed);
+	InputHandler->BindAction("Drop", IE_Released, this, &UShootInputHandler::DropButtonReleased);
 }
 
 void UShootInputHandler::MoveForward(float Value)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
 	if ((OwnerCharacter->Controller != nullptr) && (Value != 0.0f))
 	{
-		//find out which way is forward
 		const FRotator Rotation = OwnerCharacter->Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		//get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-		if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-		{
-			if (ShoPlayerCharacter->MoveState == EMovementState::Walk)
-			{
-				Value *= 0.5f;
-			}
-
-			if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
-			{
-				Value *= 0.4f;
-			}
-
-			if (ShoPlayerCharacter->GetIsAiming())
-			{
-				Value *= 0.8f;
-			}
-		}
-
+		
 		OwnerCharacter->AddMovementInput(Direction, Value);
 	}
 }
 
 void UShootInputHandler::MoveRight(float Value)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
 	if ((OwnerCharacter->Controller != nullptr) && (Value != 0.0f))
 	{
-		// find out which way is right
 		const FRotator Rotation = OwnerCharacter->Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-		{
-			if (ShoPlayerCharacter->MoveState == EMovementState::Walk)
-			{
-				Value *= 0.5f;
-			}
-
-			if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
-			{
-				Value *= 0.4f;
-			}
-
-			if (ShoPlayerCharacter->GetIsAiming())
-			{
-				Value *= 0.8f;
-			}
-		}
-
-		// add movement in that direction
+		
 		OwnerCharacter->AddMovementInput(Direction, Value);
 	}
-
 }
 
 void UShootInputHandler::TurnAtRate(float Rate)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		OwnerCharacter->AddControllerYawInput(Rate * ShoPlayerCharacter->BaseTurnRate * GetWorld()->GetDeltaSeconds());
-	}
+	OwnerCharacter->AddControllerYawInput(Rate * OwnerCharacter->BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void UShootInputHandler::LookUpAtRate(float Rate)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		OwnerCharacter->AddControllerPitchInput(Rate * ShoPlayerCharacter->BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-	}
+	OwnerCharacter->AddControllerPitchInput(Rate * OwnerCharacter->BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void UShootInputHandler::Turn(float Rate)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	float TurnScaleFactor = 0.0f;
+	if (OwnerCharacter->GetIsAiming())
 	{
-		float TurnScaleFactor = 0.0f;
-		if (ShoPlayerCharacter->GetIsAiming())
-		{
-			TurnScaleFactor = ShoPlayerCharacter->MouseAimingTurnRate;
-		}
-		else
-		{
-			TurnScaleFactor = ShoPlayerCharacter->MouseHipTurnRate;
-		}
-		OwnerCharacter->AddControllerYawInput(Rate * TurnScaleFactor);
+		TurnScaleFactor = OwnerCharacter->MouseAimingTurnRate;
 	}
-
+	else
+	{
+		TurnScaleFactor = OwnerCharacter->MouseHipTurnRate;
+	}
+	OwnerCharacter->AddControllerYawInput(Rate * TurnScaleFactor);
 }
 
 void UShootInputHandler::LookUp(float Rate)
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	float LookUpScaleFactor = 0.0f;
+	if (OwnerCharacter->GetIsAiming())
 	{
-		float LookUpScaleFactor = 0.0f;
-		if (ShoPlayerCharacter->GetIsAiming())
-		{
-			LookUpScaleFactor = ShoPlayerCharacter->MouseAimingLookUpRate;
-		}
-		else
-		{
-			LookUpScaleFactor = ShoPlayerCharacter->MouseHipLookUpRate;
-		}
-		OwnerCharacter->AddControllerPitchInput(Rate * LookUpScaleFactor);
+		LookUpScaleFactor = OwnerCharacter->MouseAimingLookUpRate;
 	}
+	else
+	{
+		LookUpScaleFactor = OwnerCharacter->MouseHipLookUpRate;
+	}
+	OwnerCharacter->AddControllerPitchInput(Rate * LookUpScaleFactor);	
 }
 
 void UShootInputHandler::StartJump()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
-	OwnerCharacter->Jump();
+
+	OwnerCharacter->JumpButtonPressed();	
 }
 
 void UShootInputHandler::StopJump()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
-	OwnerCharacter->StopJumping();
+
+	OwnerCharacter->JumpButtonReleased();
 }
 
 void UShootInputHandler::StartCrouch()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (!OwnerCharacter->GetCharacterMovement()->IsCrouching() && !OwnerCharacter->GetCharacterMovement()->IsFalling())
-	{
-		OwnerCharacter->GetCharacterMovement()->bWantsToCrouch = true;
-	}
+	OwnerCharacter->CrouchButtonPressed();	
 }
 
 void UShootInputHandler::StopCrouch()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (OwnerCharacter->GetCharacterMovement()->IsCrouching())
-	{
-		OwnerCharacter->GetCharacterMovement()->bWantsToCrouch = false;
-	}	
+	OwnerCharacter->CrouchButtonReleased();
 }
 
 void UShootInputHandler::StartSprint()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		ShoPlayerCharacter->MoveState = EMovementState::Run;
-
-	}
+	OwnerCharacter->SprintButtonPressed();
 }
 
 void UShootInputHandler::StopSprint()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		ShoPlayerCharacter->MoveState = EMovementState::Walk;
-
-	}
+	OwnerCharacter->SprintButtonReleased();
 }
 
 void UShootInputHandler::FireButtonPressed()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		//ShoPlayerCharacter->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(FGameplayTagContainer(FGameplayTag::RequestGameplayTag(FName("Ability.Skill.Fire"))));
-		ShoPlayerCharacter->FireButtonPressed();
-	}
-
+	OwnerCharacter->FireButtonPressed();	
 }
 
 void UShootInputHandler::FireButtonReleased()
 {
-	if (!IsValid(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
 		return;
 	}
 
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
-	{
-		ShoPlayerCharacter->FireButtonReleased();
-	}
+	OwnerCharacter->FireButtonReleased();
 }
 
 void UShootInputHandler::AimingButtonPressed()
 {
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
-		ShoPlayerCharacter->AimingButtonPressed();
+		return;
 	}
+
+	OwnerCharacter->AimingButtonPressed();
 }
 
 void UShootInputHandler::AimingButtonReleased()
 {
-	if (APlayerCharacter* ShoPlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
 	{
-		ShoPlayerCharacter->AimingButtonReleased();
+		return;
+	}
+
+	OwnerCharacter->AimingButtonReleased();
+}
+
+void UShootInputHandler::InteractiveButtonPressed()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+}
+
+void UShootInputHandler::InteractiveButtonReleased()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+
+	OwnerCharacter->InteractiveButtonPressed();
+}
+
+void UShootInputHandler::DropButtonPressed()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+
+	OwnerCharacter->DropButtonPressed();
+}
+
+void UShootInputHandler::DropButtonReleased()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+}
+
+void UShootInputHandler::ReloadButtonPressed()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+
+	OwnerCharacter->ReloadButtonPressed();
+}
+
+void UShootInputHandler::ReloadButtonReleased()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
 	}
 }

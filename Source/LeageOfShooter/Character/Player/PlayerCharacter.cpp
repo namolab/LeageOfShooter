@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -10,41 +9,45 @@
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "Engine/SkeletalMeshSocket.h"
+#include "Engine/StaticMeshSocket.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Perception/AISense_Hearing.h"
+#include "LeageOfShooter/Character/AI/Ai_Tags.h"
+#include "LeageOfShooter/Character/AI/AICharacter.h"
+#include "LeageOfShooter/Character/Player/Component/ShootInputHandler.h"
+#include "LeageOfShooter/Item/Weapon/RangeWeapon.h"
+#include "LeageOfShooter/Item/Ammo/Ammo.h"
+#include "LeageOfShooter/Interactive/InteractiveActor.h"
+#include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetWork.h"
  
 APlayerCharacter::APlayerCharacter()
 	: Super(), CameraDefaultFOV(0.0f), CameraCurrentFOV(0.0f)
 {
-	//// Don't rotate when the controller rotates. Let that just affect the camera.
+	PrimaryActorTick.bCanEverTick = true;
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
-	//// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = false; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->bOrientRotationToMovement = false; 	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); 
 	GetCharacterMovement()->JumpZVelocity = 500.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 180.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	CameraBoom->SocketOffset = FVector(0.f, 50.0f, 70.0f);
+	CameraBoom->TargetArmLength = 240.0f; 
+	CameraBoom->bUsePawnControlRotation = true; 
+	CameraBoom->SocketOffset = FVector(0.f, 35.0f, 80.0f);
 
-	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); 
+	FollowCamera->bUsePawnControlRotation = false; 
 
 	InputHandlerComponent = CreateDefaultSubobject<UShootInputHandler>(TEXT("InputHandlerComponent"));
 
-	MoveState = EMovementState::Walk;
-	CombatState = ECombatState::Normal;
-	CameraZoomedFOV = 35.0f;
+	CameraZoomedFOV = 25.0f;
 	ZoomInterpSpeed = 20.0f;
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -59,7 +62,6 @@ APlayerCharacter::APlayerCharacter()
 	MouseAimingTurnRate = 0.8f;
 	MouseAimingLookUpRate = 0.8f;
 
-
 	CrosshairSpreadMultiplier = 0.0f;
 	CrosshairVelocityFactor = 0.0f;
 	CrosshairInAirFactor = 0.0f;
@@ -67,12 +69,24 @@ APlayerCharacter::APlayerCharacter()
 	CrosshairShootingFactor = 0.0f;
 
 	ShootTimeDuration = 0.05f;
-	bFiringBullet = false;
+	
+	StartingAmmo9mm = 85;
+	StartingAmmoAR = 120;
 	AutomaticFireRate = 0.1f;
+	SprintMovementSpeed = 500.0f;
+	BaseMovementSpeed = 350.0f;
+	CrouchMovementSpeed = 200.0f;
+
+	CombatState = EFireState::Idle;
+	bFiringBullet = false;
+
 	bShouldFire = true;
 	bFireButtonPressed = false;
 	bAiming = false;
 	bBeamEnd = false;
+	bShouldTraceForItems = false;
+	bCrouch = false;
+	bAimingPressed = false;
 }
 
 void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -81,6 +95,9 @@ void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(APlayerCharacter, bAiming);
 	DOREPLIFETIME(APlayerCharacter, BeamEnd);
 	DOREPLIFETIME(APlayerCharacter, bBeamEnd);
+	DOREPLIFETIME(APlayerCharacter, EquippedWeapon);
+	DOREPLIFETIME(APlayerCharacter, bCrouch);
+	DOREPLIFETIME(APlayerCharacter, bIsDie);
 }
 
 void APlayerCharacter::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
@@ -90,7 +107,6 @@ void APlayerCharacter::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHei
 	if (!GetCharacterMovement()->IsFalling())
 	{
 		const FVector ModifyVec(0, 0, ScaledHalfHeightAdjust);
-
 		CamCurrentLocation = CamBaseLocation + ModifyVec;
 	}
 }
@@ -101,7 +117,6 @@ void APlayerCharacter::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeigh
 	if (!GetCharacterMovement()->IsFalling())
 	{
 		const FVector ModifyVec(0, 0, ScaledHalfHeightAdjust);
-
 		CamCurrentLocation = CamBaseLocation - ModifyVec;
 	}
 }
@@ -114,9 +129,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 	UpdateAiming(DeltaTime);
 	UpdateLookRates(DeltaTime);
 	UpdateCrosshairSpread(DeltaTime);
+
+	if (IsLocallyControlled())
+	{
+		TraceForItems();
+	}
 }
-
-
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -142,6 +160,15 @@ void APlayerCharacter::BeginPlay()
 	HipFireMontage = HipFireMontageSoft.LoadSynchronous();
 	ImpactParticle = ImpactParticleSoft.LoadSynchronous();
 	FireBeamParticle = FireBeamParticleSoft.LoadSynchronous();
+	ReloadMontage = ReloadMontageSoft.LoadSynchronous();
+	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
+
+	InitializeAmmoMap();
+
+	if (HasAuthority())
+	{
+		EquipWeapon(SpawnDefaultWeapon());
+	}
 
 	if (FollowCamera)
 	{
@@ -150,102 +177,109 @@ void APlayerCharacter::BeginPlay()
 	}
 }
 
-bool APlayerCharacter::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVector& OutBeamLocation)
+void APlayerCharacter::IncrementOverlappedItemCount(int32 Amount)
 {
-	FVector2D ViewPortSize;
-	if (GEngine && GEngine->GameViewport)
+	if (OverlappedItemCount + Amount <= 0)
 	{
-		GEngine->GameViewport->GetViewportSize(ViewPortSize);
+		OverlappedItemCount = 0;
+		bShouldTraceForItems = false;
 	}
-
-	FVector2D CrosshairLocation(ViewPortSize.X / 2.f, ViewPortSize.Y / 2.f);
-
-	FVector CrosshairWorldPosition;
-	FVector CrosshairWorldDirection;
-
-	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0),
-		CrosshairLocation,
-		CrosshairWorldPosition,
-		CrosshairWorldDirection);
-
-	if (bScreenToWorld)
+	else
 	{
-		FHitResult ScreenTraceHit;
-		const FVector Start = CrosshairWorldPosition;
-		const FVector End = CrosshairWorldPosition + CrosshairWorldDirection * 10000.f;
-
-		OutBeamLocation = End;
-		
-		FCollisionQueryParams CollisionParams;
-		FCollisionResponseParams CollisionResponese;
-		CollisionParams.AddIgnoredActor(this);
-
-		GetWorld()->LineTraceSingleByChannel(ScreenTraceHit, Start, End, ECollisionChannel::ECC_EngineTraceChannel2, CollisionParams, CollisionResponese);
-
-		if (ScreenTraceHit.bBlockingHit)
-		{
-			OutBeamLocation = ScreenTraceHit.Location;
-		}
-
-		FHitResult WeaponTraceHit;
-		const FVector WeaponTraceStart = MuzzleSocketLocation;
-		const FVector WeaponTraceEnd = OutBeamLocation;
-		
-
-		GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_EngineTraceChannel2, CollisionParams, CollisionResponese);
-
-		if (WeaponTraceHit.bBlockingHit)
-		{
-			OutBeamLocation = WeaponTraceHit.Location;
-			HitDamage(WeaponTraceHit);
-		}
-		else if (ScreenTraceHit.bBlockingHit)
-		{
-			HitDamage(ScreenTraceHit);
-		}
-
-		return true;
+		OverlappedItemCount += Amount;
+		bShouldTraceForItems = true;
 	}
-
-	return false;
 }
 
 void APlayerCharacter::AimingButtonPressed()
 {
-	bAiming = true;
-
-	if (!HasAuthority())
+	if (CombatState == EFireState::Reloading)
 	{
-		CS_SetAiming(bAiming);
+		return;
 	}
+
+	bAimingPressed = true;
+	GetCharacterMovement()->MaxWalkSpeed = CrouchMovementSpeed;
+	StartAim();
 }
 
 void APlayerCharacter::AimingButtonReleased()
 {
-	bAiming = false;
+	bAimingPressed = false;
+
+	if (!bCrouch)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
+	}
+
+	StopAim();
+}
+
+void APlayerCharacter::CrouchButtonPressed()
+{
+	bCrouch = true;
 
 	if (!HasAuthority())
 	{
-		CS_SetAiming(bAiming);
+		CS_SetCrouch(bCrouch);
+	}
+
+	if (!GetCharacterMovement()->IsCrouching() && !GetCharacterMovement()->IsFalling())
+	{
+		GetCharacterMovement()->bWantsToCrouch = bCrouch;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed = CrouchMovementSpeed;
+}
+
+void APlayerCharacter::CrouchButtonReleased()
+{
+	bCrouch = false;
+
+	if (!HasAuthority())
+	{
+		CS_SetCrouch(bCrouch);
+	}
+
+	if (GetCharacterMovement()->IsCrouching())
+	{
+		GetCharacterMovement()->bWantsToCrouch = bCrouch;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
+}
+
+void APlayerCharacter::SprintButtonPressed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
+}
+
+void APlayerCharacter::SprintButtonReleased()
+{
+	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
+}
+
+void APlayerCharacter::JumpButtonPressed()
+{
+	if (bCrouch)
+	{
+		CrouchButtonReleased();
+	}
+	else
+	{
+		ACharacter::Jump();
 	}
 }
 
-void APlayerCharacter::StartCrosshairBulletFire()
+void APlayerCharacter::JumpButtonReleased()
 {
-	bFiringBullet = true;
-
-	GetWorldTimerManager().SetTimer(CrosshairShootTimer, this, &APlayerCharacter::FinishCrosshairBulletFire, ShootTimeDuration, false);
-}
-
-void APlayerCharacter::FinishCrosshairBulletFire()
-{
-	bFiringBullet = false;
+	ACharacter::StopJumping();
 }
 
 void APlayerCharacter::FireButtonPressed()
 {
 	bFireButtonPressed = true;
-	StartFireTimer();
+	FireWeapon();
 }
 
 void APlayerCharacter::FireButtonReleased()
@@ -253,36 +287,49 @@ void APlayerCharacter::FireButtonReleased()
 	bFireButtonPressed = false;
 }
 
-void APlayerCharacter::StartFireTimer()
+void APlayerCharacter::InteractiveButtonPressed()
 {
-	if (bShouldFire)
+	if (IsValid(TraceHitLastFrame))
 	{
-		FireWeapon();
-		bShouldFire = false;
-		GetWorldTimerManager().SetTimer(AutoFireTimer, this, &APlayerCharacter::AutoFireReset, AutomaticFireRate, false);
+		GetPickupItem(TraceHitLastFrame);
+		TraceHitLastFrame = nullptr;
 	}
 }
 
-void APlayerCharacter::AutoFireReset()
+void APlayerCharacter::InteractveButtonReleased()
 {
-	bShouldFire = true;
-	if (bFireButtonPressed)
-	{
-		StartFireTimer();
-	}
+}
+
+void APlayerCharacter::DropButtonPressed()
+{
+	DropItem();
+}
+
+void APlayerCharacter::DropButtonReleased()
+{
+
+}
+
+void APlayerCharacter::ReloadButtonPressed()
+{
+	ReloadWeapon();
 }
 
 void APlayerCharacter::FireWeapon()
 {
+	if (!IsValid(EquippedWeapon) || CombatState != EFireState::Idle || !WeaponHasAmmo())
+	{
+		return;
+	}
+
 	bBeamEnd = false;
 
 	if (IsValid(GetMesh()))
 	{
-		const USkeletalMeshSocket* BarrelSocket = GetMesh()->GetSocketByName("BarrelSocket");
-
-		if (BarrelSocket)
+		if(const UStaticMeshSocket* BarrelSocket = EquippedWeapon->GetItemMesh()->GetSocketByName("BarrelSocket"))
 		{
-			const FTransform SocketTransform = BarrelSocket->GetSocketTransform(GetMesh());
+			FTransform SocketTransform;
+			BarrelSocket->GetSocketTransform(SocketTransform, EquippedWeapon->GetItemMesh());
 			bBeamEnd = GetBeamEndLocation(SocketTransform.GetLocation(), BeamEnd);
 		}
 	}
@@ -295,6 +342,318 @@ void APlayerCharacter::FireWeapon()
 	{
 		CS_FireWeapon(BeamEnd, bBeamEnd);
 	}
+
+	EquippedWeapon->DecrementAmmo();
+
+	if (IsLocallyControlled())
+	{
+		RefreshAmmoWidget();
+	}
+
+	StartFireTimer();
+}
+
+void APlayerCharacter::ReloadWeapon()
+{
+	if (!IsValid(EquippedWeapon) || CombatState != EFireState::Idle || CarryingAmmo() <= 0 || EquippedWeapon->ClipIsFull())
+	{
+		return;
+	}
+
+	if (bAiming)
+	{
+		StopAim();
+	}
+
+	CombatState = EFireState::Reloading;
+
+	if (HasAuthority())
+	{
+		SM_ReloadWeapon();
+	}
+	else
+	{
+		CS_ReloadWeapon();
+	}
+}
+
+int32 APlayerCharacter::CarryingAmmo()
+{
+	if (!IsValid(EquippedWeapon))
+	{
+		return 0;
+	}
+
+	auto AmmoType = EquippedWeapon->GetEAmmoType();
+
+	if (AmmoMap.Contains(AmmoType))
+	{
+		return AmmoMap[AmmoType];
+	}
+
+	return 0;
+}
+
+bool APlayerCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation, float LineDistance)
+{
+	FVector2D ViewPortSize;
+
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewPortSize);
+	}
+
+	FVector2D CrosshairLocation(ViewPortSize.X / 2.f, ViewPortSize.Y / 2.f);
+	FVector CrosshairWorldPosition;
+	FVector CrosshairWorldDirection;
+
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection);
+
+	if (bScreenToWorld)
+	{
+		FHitResult ScreenTraceHit;
+		const FVector Start = CrosshairWorldPosition;
+		const FVector End = CrosshairWorldPosition + CrosshairWorldDirection * LineDistance;
+		OutHitLocation = End;
+
+		FCollisionQueryParams CollisionParams;
+		FCollisionResponseParams CollisionResponese;
+		CollisionParams.AddIgnoredActor(this);
+
+		if (EquippedWeapon)
+		{
+			CollisionParams.AddIgnoredActor(EquippedWeapon);
+		}
+
+		GetWorld()->LineTraceSingleByChannel(OutHitResult, Start, End, ECollisionChannel::ECC_Visibility, CollisionParams, CollisionResponese);
+
+		if (OutHitResult.bBlockingHit)
+		{
+			OutHitLocation = OutHitResult.Location;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void APlayerCharacter::TraceForItems()
+{
+	if (bShouldTraceForItems)
+	{
+		FHitResult ObjectTraceResult;
+		FVector HitLocation;
+
+		if (TraceUnderCrosshairs(ObjectTraceResult, HitLocation, 1000.0f))
+		{
+			if (AItem* HitItem = Cast<AItem>(ObjectTraceResult.GetActor()))
+			{
+				HitItem->GetPickupWidget()->SetVisibility(true);
+
+				if (IsValid(TraceHitLastFrame))
+				{
+					if (TraceHitLastFrame->GetUniqueID() != HitItem->GetUniqueID())
+					{
+						TraceHitLastFrame->GetPickupWidget()->SetVisibility(false);
+					}
+				}
+
+				TraceHitLastFrame = HitItem;
+			}
+			else
+			{
+				if (IsValid(TraceHitLastFrame))
+				{
+					TraceHitLastFrame->GetPickupWidget()->SetVisibility(false);
+				}
+			}
+		}
+		else
+		{
+			if (IsValid(TraceHitLastFrame))
+			{
+				TraceHitLastFrame->GetPickupWidget()->SetVisibility(false);
+			}
+		}
+	}
+	else
+	{
+		if (IsValid(TraceHitLastFrame))
+		{
+			TraceHitLastFrame->GetPickupWidget()->SetVisibility(false);
+			TraceHitLastFrame = nullptr;
+		}
+	}
+}
+
+void APlayerCharacter::EquipWeapon(ARangeWeapon* WeaponToEquip)
+{
+	if (IsValid(WeaponToEquip))
+	{
+		if (HasAuthority())
+		{
+			EquippedWeapon = WeaponToEquip;
+			OnRep_AttachWeapon();
+		}
+		else
+		{
+			CS_EquipWeapon(WeaponToEquip);
+		}
+	}
+}
+
+void APlayerCharacter::DropItem()
+{
+	if (IsValid(EquippedWeapon))
+	{
+		if (HasAuthority())
+		{
+			SM_DropItem();
+			EquippedWeapon = nullptr;
+		}
+		else
+		{
+			CS_DropItem();
+		}
+	}
+}
+
+void APlayerCharacter::RefreshAmmoWidget()
+{
+	if (IsValid(EquippedWeapon))
+	{
+		int32 CurrAmmo = 0;
+		int32 MaxMagazineAmmo = 0;
+
+		if (EquippedWeapon->GetEItemState() == EItemState::Equipped)
+		{
+			CurrAmmo = EquippedWeapon->GetCurrAmmo();
+
+			MaxMagazineAmmo = CarryingAmmo();
+		}
+		OnAmmoChanged.Broadcast(CurrAmmo, MaxMagazineAmmo);
+	}
+}
+
+bool APlayerCharacter::WeaponHasAmmo()
+{
+	if (IsValid(EquippedWeapon))
+	{
+		if (EquippedWeapon->GetCurrAmmo() > 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void APlayerCharacter::FinishReload()
+{
+	if (!IsValid(EquippedWeapon))
+	{
+		return;
+	}
+
+	const auto AmmoType = EquippedWeapon->GetEAmmoType();
+
+	if (AmmoMap.Contains(AmmoType))
+	{
+		int32 CarriedAmmo = AmmoMap[AmmoType];
+
+		const int32 MagazineAmmo = EquippedWeapon->GetEnableReloadAmmo() - EquippedWeapon->GetCurrAmmo();
+
+		if (MagazineAmmo > CarriedAmmo)
+		{
+			EquippedWeapon->ReloadAmmo(CarriedAmmo);
+			CarriedAmmo = 0;
+		}
+		else
+		{
+			EquippedWeapon->ReloadAmmo(MagazineAmmo);
+			CarriedAmmo -= MagazineAmmo;
+		}
+
+		AmmoMap.Add(AmmoType, CarriedAmmo);
+	}
+
+	if (IsLocallyControlled())
+	{
+		RefreshAmmoWidget();
+	}
+
+	CombatState = EFireState::Idle;
+
+	if (bAimingPressed)
+	{
+		StartAim();
+	}
+}
+
+void APlayerCharacter::GetPickupItem(AItem* Item)
+{
+	if (auto Weapon = Cast<ARangeWeapon>(Item))
+	{
+		SwapWeapon(Weapon);
+	}
+	else if (auto Ammo = Cast<AAmmo>(Item))
+	{
+		GetPickupAmmo(Ammo);
+	}
+}
+
+void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
+{
+	if (AmmoMap.Contains(Ammo->GetEAmmoType()))
+	{
+		int32 AmmoCnt = AmmoMap[Ammo->GetEAmmoType()];
+		AmmoCnt += Ammo->GetItemCnt();
+		AmmoMap[Ammo->GetEAmmoType()] = AmmoCnt;
+	}
+
+	if (EquippedWeapon->GetEAmmoType() == Ammo->GetEAmmoType())
+	{
+		RefreshAmmoWidget();
+	}
+
+	if (HasAuthority())
+	{
+		SM_GetPickupAmmo(Ammo);
+	}
+	else
+	{
+		CS_GetPickupAmmo(Ammo);
+	}
+}
+
+void APlayerCharacter::OnRep_AttachWeapon()
+{
+	if (IsValid(EquippedWeapon))
+	{
+		if (EquippedWeapon->GetEItemState() == EItemState::PickUp)
+		{
+			EquippedWeapon->SetItemState(EItemState::Equipped);
+			EquippedWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("RightHandSocket"));
+		}
+
+		if (IsLocallyControlled())
+		{
+			RefreshAmmoWidget();
+		}
+	}
+}
+void APlayerCharacter::OnRep_Die()
+{
+	if (DeadMontage.Num() > 0)
+	{
+		int32 MontageIndex = FMath::RandRange(0, DeadMontage.Num() - 1);
+		UAnimationAsset* DeathMontage = DeadMontage[MontageIndex];
+		GetMesh()->PlayAnimation(DeathMontage, false);
+	}
+
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Ragdoll")),true);
 }
 
 void APlayerCharacter::CS_FireWeapon_Implementation(const FVector& BeamEndParam, bool bBeamEndParam)
@@ -307,32 +666,215 @@ void APlayerCharacter::CS_FireWeapon_Implementation(const FVector& BeamEndParam,
 
 void APlayerCharacter::SM_FireWeapon_Implementation(const FVector& BeamEndParam, bool bBeamEndParam)
 {
-	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	
-	if (IsValid(GetMesh()))
+	PlayFireSound();
+	SendBullet(BeamEndParam, bBeamEndParam);
+	PlayGunFireMontage();
+}
+
+void APlayerCharacter::CS_HitDamage_Implementation(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect)
+{
+	SM_HitDamage(HitResult, DamageEffect);
+}
+
+void APlayerCharacter::SM_HitDamage_Implementation(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect)
+{
+	if (AActor* HitActor = HitResult.GetActor())
 	{
-		const USkeletalMeshSocket* BarrelSocket = GetMesh()->GetSocketByName("BarrelSocket");
-
-		if (BarrelSocket)
+		///////////////////////////////현재는 플레이어 끼리 데미지 입히는 구조////////////////////
+		if (APlayerCharacter* HitActorPlayer = Cast<APlayerCharacter>(HitActor))
 		{
-			const FTransform SocketTransform = BarrelSocket->GetSocketTransform(GetMesh());
-
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireParticle, SocketTransform);
-
-			if (bBeamEndParam)
+			if (HitActorPlayer->GetIsDie())
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, BeamEndParam);
-			
-				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireBeamParticle, SocketTransform);
+				return;
+			}
 
-				if (Beam)
-				{
-					Beam->SetVectorParameter(FName("Target"), BeamEndParam);
-				}
+			if (IsValid(DamageEffect))
+			{
+				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
+				EffectContext.AddSourceObject(this);
+				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
+
+				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorPlayer->GetAbilitySystemComponent());
+			}
+		}
+		else if (AAICharacter* HitActorAI = Cast<AAICharacter>(HitActor))
+		{
+			if (HitActorAI->GetIsDie())
+			{
+				return;
+			}
+
+			if (IsValid(DamageEffect) && !HitActorAI->GetIsDie())
+			{
+				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
+				EffectContext.AddSourceObject(this);
+				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
+
+				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorAI->GetAbilitySystemComponent());
+				HitActorAI->ShowHitNumber(AttributeSetComp->GetFireDamage(), HitResult.Location);
+			}
+
+		}
+	}
+}
+
+void APlayerCharacter::CS_SetAiming_Implementation(bool WantsToAim)
+{
+	bAiming = WantsToAim;
+}
+
+void APlayerCharacter::CS_SetCrouch_Implementation(bool WantsToCrouch)
+{
+	bCrouch = WantsToCrouch;
+}
+
+void APlayerCharacter::CS_EquipWeapon_Implementation(ARangeWeapon* WeaponToEquip)
+{
+	EquipWeapon(WeaponToEquip);
+}
+
+void APlayerCharacter::CS_DropItem_Implementation()
+{
+	DropItem();
+}
+
+void APlayerCharacter::SM_DropItem_Implementation()
+{
+	if (IsValid(EquippedWeapon))
+	{
+		FDetachmentTransformRules DetachmentTransformRules(EDetachmentRule::KeepWorld, true);
+		EquippedWeapon->GetItemMesh()->DetachFromComponent(DetachmentTransformRules);
+		EquippedWeapon->SetItemState(EItemState::PickUp);
+	}
+
+	if (IsLocallyControlled())
+	{
+		RefreshAmmoWidget();
+	}
+}
+
+void APlayerCharacter::CS_ReloadWeapon_Implementation()
+{
+	SM_ReloadWeapon();
+}
+
+void APlayerCharacter::SM_ReloadWeapon_Implementation()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (IsValid(AnimInstance))
+	{
+		AnimInstance->Montage_Play(ReloadMontage);
+		AnimInstance->Montage_JumpToSection(EquippedWeapon->GetReloadMontageSection());
+	}
+}
+
+void APlayerCharacter::CS_GetPickupAmmo_Implementation(AAmmo* Ammo)
+{
+	SM_GetPickupAmmo(Ammo);
+}
+
+void APlayerCharacter::SM_GetPickupAmmo_Implementation(AAmmo* Ammo)
+{
+	Ammo->Destroy();
+}
+
+void APlayerCharacter::Die()
+{
+	if (HasAuthority())
+	{
+		bIsDie = true;
+		OnRep_Die();
+	}
+
+	GetCharacterMovement()->DisableMovement();
+}
+
+bool APlayerCharacter::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVector& OutBeamLocation)
+{
+	FHitResult CrosshairHitResult;
+	bool bCrosshairHit = TraceUnderCrosshairs(CrosshairHitResult, OutBeamLocation, 30000.0f);
+
+	if (bCrosshairHit)
+	{
+		OutBeamLocation = CrosshairHitResult.Location;
+	}
+
+	FCollisionQueryParams CollisionParams;
+	FCollisionResponseParams CollisionResponese;
+	CollisionParams.AddIgnoredActor(this);
+
+	if (EquippedWeapon)
+	{
+		CollisionParams.AddIgnoredActor(EquippedWeapon);
+	}
+
+	FHitResult WeaponTraceHit;
+	const FVector WeaponTraceStart = MuzzleSocketLocation;
+	const FVector StartToEnd = OutBeamLocation - MuzzleSocketLocation;
+	const FVector WeaponTraceEnd = MuzzleSocketLocation + StartToEnd * 1.25f;
+
+	GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_EngineTraceChannel2, CollisionParams, CollisionResponese);
+
+	if (WeaponTraceHit.bBlockingHit)
+	{
+		OutBeamLocation = WeaponTraceHit.Location;
+		HitDamage(WeaponTraceHit, AttackDamageEffect);
+		return true;
+	}
+
+	return false;
+}
+
+ARangeWeapon* APlayerCharacter::SpawnDefaultWeapon()
+{
+	if (IsValid(DefaultWeaponClass))
+	{
+		return GetWorld()->SpawnActor<ARangeWeapon>(DefaultWeaponClass);
+	}
+
+	return nullptr;
+}
+
+void APlayerCharacter::InitializeAmmoMap()
+{
+	AmmoMap.Add(EAmmoType::Ammo9mm, StartingAmmo9mm);
+	AmmoMap.Add(EAmmoType::AmmoAR, StartingAmmoAR);
+}
+
+void APlayerCharacter::PlayFireSound()
+{
+	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	UAISense_Hearing::ReportNoiseEvent(GetWorld(), GetActorLocation(), 1.0f, this, 0.0f, Tags::Noise_Tag);
+}
+
+void APlayerCharacter::SendBullet(const FVector& BeamEndParam, bool bBeamEndParam)
+{
+	const UStaticMeshSocket* BarrelSocket = EquippedWeapon->GetItemMesh()->GetSocketByName("BarrelSocket");
+
+	if (IsValid(BarrelSocket))
+	{
+		FTransform SocketTransform;
+		BarrelSocket->GetSocketTransform(SocketTransform, EquippedWeapon->GetItemMesh());
+
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireParticle, SocketTransform);
+
+		if (bBeamEndParam)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, BeamEndParam);
+
+			UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireBeamParticle, SocketTransform);
+
+			if (Beam)
+			{
+				Beam->SetVectorParameter(FName("Target"), BeamEndParam);
 			}
 		}
 	}
+	
+}
 
+void APlayerCharacter::PlayGunFireMontage()
+{
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (IsValid(AnimInstance))
 	{
@@ -343,45 +885,64 @@ void APlayerCharacter::SM_FireWeapon_Implementation(const FVector& BeamEndParam,
 	StartCrosshairBulletFire();
 }
 
-void APlayerCharacter::HitDamage(FHitResult HitResult)
+void APlayerCharacter::StartAim()
 {
-	if (HasAuthority())
+	bAiming = true;
+
+	if (!HasAuthority())
 	{
-		SM_HitDamage(HitResult);
-	}
-	else
-	{
-		CS_HitDamage(HitResult);
+		CS_SetAiming(bAiming);
 	}
 }
 
-void APlayerCharacter::CS_HitDamage_Implementation(FHitResult HitResult)
+void APlayerCharacter::StopAim()
 {
-	SM_HitDamage(HitResult);
+	bAiming = false;
+
+	if (!HasAuthority())
+	{
+		CS_SetAiming(bAiming);
+	}
 }
 
-void APlayerCharacter::SM_HitDamage_Implementation(FHitResult HitResult)
+void APlayerCharacter::SwapWeapon(ARangeWeapon* Weapon)
 {
-	if (AActor* HitActor = HitResult.GetActor())
+	if (IsValid(EquippedWeapon))
 	{
-		///////////////////////////////현재는 플레이어 끼리 데미지 입히는 구조////////////////////
-		if (APlayerCharacter* HitActorPlayer = Cast<APlayerCharacter>(HitActor))
+		DropItem();
+	}
+
+	EquipWeapon(Weapon);
+}
+
+void APlayerCharacter::StartCrosshairBulletFire()
+{
+	bFiringBullet = true;
+	GetWorldTimerManager().SetTimer(CrosshairShootTimer, this, &APlayerCharacter::FinishCrosshairBulletFire, ShootTimeDuration, false);
+}
+
+void APlayerCharacter::FinishCrosshairBulletFire()
+{
+	bFiringBullet = false;
+}
+
+void APlayerCharacter::StartFireTimer()
+{
+	CombatState = EFireState::FireInProgress;
+	GetWorldTimerManager().SetTimer(AutoFireTimer, this, &APlayerCharacter::AutoFireReset, AutomaticFireRate, false);
+}
+
+void APlayerCharacter::AutoFireReset()
+{
+	CombatState = EFireState::Idle;
+
+	if (WeaponHasAmmo())
+	{
+		if (bFireButtonPressed)
 		{
-			if (IsValid(FireDamageEffect))
-			{
-				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
-				EffectContext.AddSourceObject(this);
-				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(FireDamageEffect, 1, EffectContext);
-
-				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorPlayer->GetAbilitySystemComponent());
-			}
+			FireWeapon();
 		}
 	}
-}
-
-void APlayerCharacter::CS_SetAiming_Implementation(bool WantsToAim)
-{
-	bAiming = WantsToAim;
 }
 
 void APlayerCharacter::UpdateCrouchCamLocation(float DeltaTime)
@@ -395,7 +956,6 @@ void APlayerCharacter::UpdateCrouchCamLocation(float DeltaTime)
 
 	FollowCamera->SetRelativeLocation(CamCurrentLocation);
 }
-
 
 void APlayerCharacter::UpdateAiming(float DeltaTime)
 {
@@ -465,8 +1025,20 @@ void APlayerCharacter::UpdateCrosshairSpread(float DeltaTime)
 		CrosshairShootingFactor = FMath::FInterpTo(CrosshairShootingFactor, 0.0f, DeltaTime, 60.0f);
 	}
 
-
 	CrosshairSpreadMultiplier = 0.5f + 
 		CrosshairVelocityFactor + CrosshairInAirFactor - 
 		CrosshairAimFactor + CrosshairShootingFactor;
+}
+
+
+void APlayerCharacter::HitDamage(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect)
+{
+	if (HasAuthority())
+	{
+		SM_HitDamage(HitResult, DamageEffect);
+	}
+	else
+	{
+		CS_HitDamage(HitResult, DamageEffect);
+	}
 }

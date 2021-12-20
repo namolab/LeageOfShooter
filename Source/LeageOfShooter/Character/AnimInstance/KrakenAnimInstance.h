@@ -4,18 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "AIAnimInstance.h"
-#include "TrollAnimInstance.generated.h"
+#include "KrakenAnimInstance.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class LEAGEOFSHOOTER_API UTrollAnimInstance : public UAIAnimInstance
+class LEAGEOFSHOOTER_API UKrakenAnimInstance : public UAIAnimInstance
 {
 	GENERATED_BODY()
 	
 public:
-	UTrollAnimInstance();
+	UKrakenAnimInstance();
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateAnimationProperties(float DeltaTime);
@@ -28,5 +26,5 @@ private:
 	float Direction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	class ATrollAI* TrollAI;
+	class AKrakenAICharacter* KrakenAI;
 };

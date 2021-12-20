@@ -47,7 +47,6 @@ void AShootPlayerController::UpdateListener()
 				PlayerRot = -1 * PlayerRot;
 
 				FRotator ListenerRot = FRotator(FQuat(PlayerRot) * FQuat(CamRot));
-
 				FRotator ListenerNewRot = FRotator(ListenerRot.Pitch, ListenerRot.Yaw+90.0f, ListenerRot.Roll);
 
 				this->SetAudioListenerOverride(OwnerPlayer->GetMesh(), FVector::ZeroVector, ListenerNewRot);

@@ -3,24 +3,34 @@
 
 #include "PlayerAnimInstance.h"
 #include "LeageOfShooter/Character/Player/PlayerCharacter.h"
+#include "LeageOfShooter/Item/Weapon/RangeWeapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetWork.h"
 
 UPlayerAnimInstance::UPlayerAnimInstance()
 {
-	Speed = 0.0f;
 	bIsInAir = false;
 	bIsAccelerating = false;
+	bCrouch = false;
+	bAiming = false;
+	bReloading = false;
+	bTurnInPlace = false;
+	bShouldUseFabrik = false;
+	Speed = 0.0f;
+	TIPCharacterYaw = 0.0f;
 	MovementOffsetYaw = 0.0f;
 	LastMovementOffsetYaw = 0.0f;
-	bAiming = false;
-	CharacterYaw = 0.0f;
-	CharacterYawLastFrame = 0.0f;
+	TIPCharacterYawLastFrame = 0.0f;
+	CharacterRotation = FRotator(0.0f);
+	CharacterRotationLastFrame = FRotator(0.0f);
 	RootYawOffset = 0.0f;
 	RootPitch = 0.0f;
+	YawDelta = 0.0f;
+	RecoilWeight = 1.0f;
+	EquipWeaponType = EWeaponType::SMG;
+	OffsetState = EOffsetState::Hip;
 }
-
 
 void UPlayerAnimInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -37,13 +47,20 @@ void UPlayerAnimInstance::UpdateAnimationProperties(float DeltaTime)
 	}
 
 	if (!IsValid(ShooterCharacter))
+	{
 		return;
+	}
 
 	FVector Velocity = ShooterCharacter->GetVelocity();
+	bReloading = (ShooterCharacter->GetCombatState() == EFireState::Reloading);
+	bIsInAir = ShooterCharacter->GetCharacterMovement()->IsFalling();
+	bAiming = ShooterCharacter->GetIsAiming();
+	bCrouch = ShooterCharacter->GetIsCrouch();
+	bShouldUseFabrik = (ShooterCharacter->GetCombatState() == EFireState::Idle) || 
+		(ShooterCharacter->GetCombatState() == EFireState::FireInProgress);
+
 	Velocity.Z = 0;
 	Speed = Velocity.Size();
-
-	bIsInAir = ShooterCharacter->GetCharacterMovement()->IsFalling();
 
 	if (ShooterCharacter->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0.f)
 	{
@@ -64,9 +81,30 @@ void UPlayerAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		LastMovementOffsetYaw = MovementOffsetYaw;
 	}
 
-	bAiming = ShooterCharacter->GetIsAiming();
+	if (bReloading)
+	{
+		OffsetState = EOffsetState::Reloading;
+	}
+	else if (bIsInAir)
+	{
+		OffsetState = EOffsetState::InAir;
+	}
+	else if (bAiming)
+	{
+		OffsetState = EOffsetState::Aiming;
+	}
+	else
+	{
+		OffsetState = EOffsetState::Hip;
+	}
+
+	if (IsValid(ShooterCharacter->GetEquippedWeapon()))
+	{
+		EquipWeaponType = ShooterCharacter->GetEquippedWeapon()->GetEWeaponType();
+	}
 
 	UpdateTurnInPlace();
+	Lean(DeltaTime);
 }
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
@@ -83,26 +121,27 @@ void UPlayerAnimInstance::UpdateTurnInPlace()
 		RootPitch = RootPitch - 360.0f;
 	}
 
-	if (Speed > 0)
+	if (Speed > 0 || bIsInAir)
 	{
 		RootYawOffset = 0.0f;
-		CharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
-		CharacterYawLastFrame = CharacterYaw;
+		TIPCharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
+		TIPCharacterYawLastFrame = TIPCharacterYaw;
 		RotationCurveLastFrame = 0.0f;
 		RotationCurve = 0.0f;
 	}
 	else
 	{
-		CharacterYawLastFrame = CharacterYaw;
-		CharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
-		const float YawDelta{ CharacterYaw - CharacterYawLastFrame };
+		TIPCharacterYawLastFrame = TIPCharacterYaw;
+		TIPCharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
+		const float TIPYawDelta{ TIPCharacterYaw - TIPCharacterYawLastFrame };
 
-		RootYawOffset = UKismetMathLibrary::NormalizeAxis(RootYawOffset - YawDelta);
+		RootYawOffset = UKismetMathLibrary::NormalizeAxis(RootYawOffset - TIPYawDelta);
 
 		const float Turning = GetCurveValue(TEXT("Turning"));
 
 		if (Turning > 0)
 		{
+			bTurnInPlace = true;
 			RotationCurveLastFrame = RotationCurve;
 			RotationCurve = GetCurveValue(TEXT("Rotation"));
 			const float DeltaRotaion = RotationCurve - RotationCurveLastFrame;
@@ -133,12 +172,65 @@ void UPlayerAnimInstance::UpdateTurnInPlace()
 
 			}
 		}
+		else
+		{
+			bTurnInPlace = false;
+		}
+	}
+
+	if (bTurnInPlace)
+	{
+		if (bReloading)
+		{
+			RecoilWeight = 1.0f;
+		}
+		else
+		{
+			RecoilWeight = 0.0f;
+		}
+	}
+	else
+	{
+		if (bCrouch)
+		{
+			if (bReloading)
+			{
+				RecoilWeight = 1.0f;
+			}
+			else
+			{
+				RecoilWeight = 0.1f;
+			}
+		}
+		else
+		{
+			if (bAiming || bReloading)
+			{
+				RecoilWeight = 1.0f;
+			}
+			else
+			{
+				RecoilWeight = 0.5f;
+			}
+		}
 	}
 
 	if (!ShooterCharacter->HasAuthority())
 	{
 		CS_SetSettingValue(RootYawOffset, RootPitch);
 	}
+}
+
+void UPlayerAnimInstance::Lean(float DeltaTime)
+{
+	CharacterRotationLastFrame = CharacterRotation;
+	CharacterRotation = ShooterCharacter->GetActorRotation();
+
+	const FRotator Delta{ UKismetMathLibrary::NormalizedDeltaRotator(CharacterRotation,CharacterRotationLastFrame) };
+
+	const float Target{ Delta .Yaw / DeltaTime };
+	const float Interp{ FMath::FInterpTo(YawDelta,Target,DeltaTime,6.f) };
+	YawDelta = FMath::Clamp(Interp, -90.0f, 90.0f);
 }
 
 void UPlayerAnimInstance::CS_SetSettingValue_Implementation(float RootYawOffsetParam, float RootPitchParam)

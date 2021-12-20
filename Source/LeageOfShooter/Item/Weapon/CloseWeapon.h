@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Weapon.h"
+#include "LeageOfShooter/Item/Item.h"
 #include "CloseWeapon.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LEAGEOFSHOOTER_API ACloseWeapon : public AWeapon
+class LEAGEOFSHOOTER_API ACloseWeapon : public AItem
 {
 	GENERATED_BODY()
 	

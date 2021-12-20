@@ -14,4 +14,6 @@ class LEAGEOFSHOOTER_API ATrollAI : public AAICharacter
 {
 	GENERATED_BODY()
 	
+public:
+	ATrollAI();
 };
