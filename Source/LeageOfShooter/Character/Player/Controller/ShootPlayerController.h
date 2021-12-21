@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseController.h"
+#include "LeageOfShooter/Item/Usable/Usable.h"
 #include "ShootPlayerController.generated.h"
 
 
@@ -16,6 +17,14 @@ public:
 	AShootPlayerController();
 
 	virtual void PlayerTick(float DeltaTime) override;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void AddItemToInventoryWidget(FItemInfo ItemData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ToggleInventory(bool bToggleVisible);
+
+	void InventoryVisible(bool Visible);
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,7 +36,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<class UUserWidget> MainWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget")
+	TSubclassOf<class UUserWidget> InventoryWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widget")
+	class UUserWidget* InventoryWidget;
+
 private:
 	UPROPERTY(Transient)
 	class UUserWidget* MainWidget;
+
 };

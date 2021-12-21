@@ -17,7 +17,7 @@ class LEAGEOFSHOOTER_API AUsable : public AItem, public IInteractableInterface
 public:
 	AUsable();
 
-	virtual void Interact() override;
+	virtual void Interact(class APlayerCharacter* Player) override;
 
 protected:
 	virtual void BeginPlay() override;

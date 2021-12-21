@@ -28,6 +28,36 @@ void AShootPlayerController::BeginPlay()
 			MainWidget = CreateWidget<UUserWidget>(this, MainWidgetClass);
 			MainWidget->AddToViewport();
 		}
+
+		if (InventoryWidgetClass != nullptr)
+		{
+			InventoryWidget = CreateWidget<UUserWidget>(this, InventoryWidgetClass);
+			InventoryWidget->AddToViewport();
+			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+}
+
+void AShootPlayerController::InventoryVisible(bool Visible)
+{
+	if (IsValid(InventoryWidget))
+	{
+		if (Visible)
+		{
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+			FInputModeGameAndUI InputModeGameAndUI;
+			SetInputMode(InputModeGameAndUI);
+		}
+		else
+		{
+			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+			FInputModeGameOnly InputModeGameOnly;
+			SetInputMode(InputModeGameOnly);
+		}
+
+		bShowMouseCursor = Visible;
+
+		ToggleInventory(Visible);
 	}
 }
 

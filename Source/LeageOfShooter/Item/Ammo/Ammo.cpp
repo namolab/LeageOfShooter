@@ -9,7 +9,7 @@ AAmmo::AAmmo()
 	AmmoType = EAmmoType::AmmoAR;
 }
 
-void AAmmo::Interact()
+void AAmmo::Interact(class APlayerCharacter* Player)
 {
 	Destroy();
 }

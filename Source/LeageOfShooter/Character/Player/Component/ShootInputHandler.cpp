@@ -53,6 +53,8 @@ void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputCo
 	InputHandler->BindAction("Reload", IE_Pressed, this, &UShootInputHandler::ReloadButtonPressed);
 
 	InputHandler->BindAction("Drop", IE_Pressed, this, &UShootInputHandler::DropButtonPressed);
+
+	InputHandler->BindAction("Tab", IE_Pressed, this, &UShootInputHandler::TabButtonPressed);
 }
 
 void UShootInputHandler::MoveForward(float Value)
@@ -275,4 +277,14 @@ void UShootInputHandler::ReloadButtonPressed()
 	}
 
 	OwnerCharacter->ReloadButtonPressed();
+}
+
+void UShootInputHandler::TabButtonPressed()
+{
+	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
+	{
+		return;
+	}
+
+	OwnerCharacter->TabButtonPressed();
 }

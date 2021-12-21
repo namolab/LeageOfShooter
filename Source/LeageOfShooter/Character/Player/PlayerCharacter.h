@@ -19,7 +19,6 @@ enum class EFireState : uint8
 	Reloading  UMETA(DisplayName = "Reloading")
 };
 
-
 UCLASS()
 class LEAGEOFSHOOTER_API APlayerCharacter : public ABaseCharacter
 {
@@ -48,6 +47,9 @@ public:
 	void InteractiveButtonPressed();
 	void DropButtonPressed();
 	void ReloadButtonPressed();
+
+	UFUNCTION(BlueprintCallable)
+	void TabButtonPressed();
 
 	void FireWeapon();
 
@@ -131,6 +133,18 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void CS_GetPickupAmmo(AAmmo* Ammo);
 
+	UFUNCTION(Server, Reliable)
+	void CS_GetPickupUsable(class AUsable* Usable);
+
+	UFUNCTION(Server, Reliable)
+	void SM_GetPickupUsable(class AUsable* Usable);
+
+	UFUNCTION()
+	void FinishCrosshairBulletFire();
+
+	UFUNCTION()
+	void AutoFireReset();
+
 	virtual void Die() override;
 
 	bool GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVector& OutBeamLocation);
@@ -150,13 +164,9 @@ protected:
 
 	void SwapWeapon(ARangeWeapon* Weapon);
 	void StartCrosshairBulletFire();
-
-	UFUNCTION()
-	void FinishCrosshairBulletFire();
 	void StartFireTimer();
 
-	UFUNCTION()
-	void AutoFireReset();
+
 private:
 	void UpdateCrouchCamLocation(float DeltaTime);
 	void UpdateAiming(float DeltaTime);
@@ -309,4 +319,6 @@ private:
 	bool bFireButtonPressed;
 	FVector CamCurrentLocation;
 	FVector CamBaseLocation;
+
+	bool bToggleInventory;
 };

@@ -72,7 +72,7 @@ public:
 	FName ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	TSoftObjectPtr<UTexture2D> ItemImage;
+	class UTexture2D* ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	EItemGrade ItemGrade;
@@ -124,6 +124,7 @@ public:
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE EItemState GetEItemState() const { return ItemState; }
 	FORCEINLINE int32 GetItemCnt() const { return ItemCnt; }
+	FORCEINLINE FItemInfo GetItemInfo() const { return ItemInfo; }
 
 	void SetItemState(EItemState State);
 

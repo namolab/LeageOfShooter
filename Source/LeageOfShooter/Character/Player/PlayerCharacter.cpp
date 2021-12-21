@@ -15,6 +15,7 @@
 #include "LeageOfShooter/Character/AI/Ai_Tags.h"
 #include "LeageOfShooter/Character/AI/AICharacter.h"
 #include "LeageOfShooter/Character/Player/Component/ShootInputHandler.h"
+#include "LeageOfShooter/Character/Player/Controller/ShootPlayerController.h"
 #include "LeageOfShooter/Item/Weapon/RangeWeapon.h"
 #include "LeageOfShooter/Item/Ammo/Ammo.h"
 #include "LeageOfShooter/Item/Usable/Usable.h"
@@ -88,6 +89,7 @@ APlayerCharacter::APlayerCharacter()
 	bShouldTraceForItems = false;
 	bCrouch = false;
 	bAimingPressed = false;
+	bToggleInventory = false;
 }
 
 void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -194,7 +196,7 @@ void APlayerCharacter::IncrementOverlappedItemCount(int32 Amount)
 
 void APlayerCharacter::AimingButtonPressed()
 {
-	if (CombatState == EFireState::Reloading)
+	if ((bToggleInventory == true) || (CombatState == EFireState::Reloading))
 	{
 		return;
 	}
@@ -305,6 +307,17 @@ void APlayerCharacter::DropButtonPressed()
 void APlayerCharacter::ReloadButtonPressed()
 {
 	ReloadWeapon();
+}
+
+void APlayerCharacter::TabButtonPressed()
+{
+	bToggleInventory = !bToggleInventory;
+
+	UE_LOG(LogTemp, Warning, TEXT("bToggleInventory %d"), bToggleInventory);
+	if(AShootPlayerController* PlayerController = Cast<AShootPlayerController>(GetController()))
+	{
+		PlayerController->InventoryVisible(bToggleInventory);
+	}
 }
 
 void APlayerCharacter::FireWeapon()
@@ -604,7 +617,7 @@ void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
 {
 	if (HasAuthority())
 	{
-		Ammo->Interact();
+		Ammo->Interact(this);
 	}
 	else
 	{
@@ -626,6 +639,15 @@ void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
 
 void APlayerCharacter::GetPickupUsable(AUsable* Usable)
 {
+	if (HasAuthority())
+	{
+		Usable->Interact(this);
+		//SM_GetPickupUsable(Usable);
+	}
+	else
+	{
+		CS_GetPickupUsable(Usable);
+	}
 }
 
 void APlayerCharacter::OnRep_AttachWeapon()
@@ -771,6 +793,16 @@ void APlayerCharacter::SM_ReloadWeapon_Implementation()
 void APlayerCharacter::CS_GetPickupAmmo_Implementation(AAmmo* Ammo)
 {
 	GetPickupAmmo(Ammo);
+}
+
+void APlayerCharacter::CS_GetPickupUsable_Implementation(AUsable* Usable)
+{
+	GetPickupUsable(Usable);
+}
+
+void APlayerCharacter::SM_GetPickupUsable_Implementation(class AUsable* Usable)
+{
+	Usable->Interact(this);
 }
 
 void APlayerCharacter::Die()

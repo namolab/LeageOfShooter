@@ -35,7 +35,7 @@ public:
 	FName ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSoftObjectPtr<UTexture2D> ItemImage;
+	class UTexture2D* ItemImage;
 };
 
 

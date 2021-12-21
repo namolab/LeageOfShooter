@@ -20,7 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	AAmmo();
 	FORCEINLINE EAmmoType GetEAmmoType() const { return AmmoType; }
-	virtual void Interact() override;
+	virtual void Interact(class APlayerCharacter* Player) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo Info", meta = (AllowPrivateAccess = "true"))

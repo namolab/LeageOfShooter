@@ -47,7 +47,7 @@ protected:
 	void DropButtonPressed();
 
 	void ReloadButtonPressed();
-
+	void TabButtonPressed();
 public:	
 	void SetupInputHandler(class ABaseCharacter* MyCharacter, class UInputComponent* InputComponent);
 
