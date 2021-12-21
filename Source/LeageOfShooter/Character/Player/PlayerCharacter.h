@@ -46,11 +46,8 @@ public:
 	void FireButtonPressed();
 	void FireButtonReleased();
 	void InteractiveButtonPressed();
-	void InteractveButtonReleased();
 	void DropButtonPressed();
-	void DropButtonReleased();
 	void ReloadButtonPressed();
-	void ReloadButtonReleased();
 
 	void FireWeapon();
 
@@ -70,9 +67,10 @@ public:
 
 	bool WeaponHasAmmo();
 	void FinishReload();
-
+	
 	void GetPickupItem(class AItem* Item);
 	void GetPickupAmmo(class AAmmo* Ammo);
+	void GetPickupUsable(class AUsable* Usable);
 
 	UFUNCTION(BlueprintCallable)
 	float GetCrosshairSpreadMultiplier() const { return CrosshairSpreadMultiplier; }
@@ -132,9 +130,6 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void CS_GetPickupAmmo(AAmmo* Ammo);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void SM_GetPickupAmmo(AAmmo* Ammo);
 
 	virtual void Die() override;
 

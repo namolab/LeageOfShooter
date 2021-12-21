@@ -19,11 +19,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
-
 	void MoveRight(float Value);
 
 	void TurnAtRate(float Rate);
-
 	void LookUpAtRate(float Rate);
 
 	void Turn(float Rate);
@@ -45,13 +43,10 @@ protected:
 	void AimingButtonReleased();
 
 	void InteractiveButtonPressed();
-	void InteractiveButtonReleased();
 
 	void DropButtonPressed();
-	void DropButtonReleased();
 
 	void ReloadButtonPressed();
-	void ReloadButtonReleased();
 
 public:	
 	void SetupInputHandler(class ABaseCharacter* MyCharacter, class UInputComponent* InputComponent);

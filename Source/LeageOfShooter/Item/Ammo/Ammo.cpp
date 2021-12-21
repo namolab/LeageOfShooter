@@ -8,3 +8,8 @@ AAmmo::AAmmo()
 {
 	AmmoType = EAmmoType::AmmoAR;
 }
+
+void AAmmo::Interact()
+{
+	Destroy();
+}

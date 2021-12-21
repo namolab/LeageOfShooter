@@ -82,6 +82,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	TArray<FItemStat> ItemStat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
+	TArray<TSubclassOf<class UGameplayEffect>> ItemUseEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
+	TSubclassOf<class AItem> ItemClass;
 };
 
 UCLASS()

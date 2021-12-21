@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LeageOfShooter/Item/Item.h"
+#include "LeageOfShooter/InteractableInterface.h"
 #include "LeageOfShooter/Item/AmmoType.h"
 #include "Ammo.generated.h"
 
@@ -11,7 +12,7 @@
  * 
  */
 UCLASS()
-class LEAGEOFSHOOTER_API AAmmo : public AItem
+class LEAGEOFSHOOTER_API AAmmo : public AItem, public IInteractableInterface
 {
 	GENERATED_BODY()
 
@@ -19,6 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	AAmmo();
 	FORCEINLINE EAmmoType GetEAmmoType() const { return AmmoType; }
+	virtual void Interact() override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo Info", meta = (AllowPrivateAccess = "true"))

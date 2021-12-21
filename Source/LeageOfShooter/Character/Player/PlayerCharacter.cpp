@@ -17,6 +17,7 @@
 #include "LeageOfShooter/Character/Player/Component/ShootInputHandler.h"
 #include "LeageOfShooter/Item/Weapon/RangeWeapon.h"
 #include "LeageOfShooter/Item/Ammo/Ammo.h"
+#include "LeageOfShooter/Item/Usable/Usable.h"
 #include "LeageOfShooter/Interactive/InteractiveActor.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetWork.h"
@@ -296,18 +297,9 @@ void APlayerCharacter::InteractiveButtonPressed()
 	}
 }
 
-void APlayerCharacter::InteractveButtonReleased()
-{
-}
-
 void APlayerCharacter::DropButtonPressed()
 {
 	DropItem();
-}
-
-void APlayerCharacter::DropButtonReleased()
-{
-
 }
 
 void APlayerCharacter::ReloadButtonPressed()
@@ -602,10 +594,23 @@ void APlayerCharacter::GetPickupItem(AItem* Item)
 	{
 		GetPickupAmmo(Ammo);
 	}
+	else if (auto UsableItem = Cast<AUsable>(Item))
+	{
+		GetPickupUsable(UsableItem);
+	}
 }
 
 void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
 {
+	if (HasAuthority())
+	{
+		Ammo->Interact();
+	}
+	else
+	{
+		CS_GetPickupAmmo(Ammo);
+	}
+
 	if (AmmoMap.Contains(Ammo->GetEAmmoType()))
 	{
 		int32 AmmoCnt = AmmoMap[Ammo->GetEAmmoType()];
@@ -617,15 +622,10 @@ void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
 	{
 		RefreshAmmoWidget();
 	}
+}
 
-	if (HasAuthority())
-	{
-		SM_GetPickupAmmo(Ammo);
-	}
-	else
-	{
-		CS_GetPickupAmmo(Ammo);
-	}
+void APlayerCharacter::GetPickupUsable(AUsable* Usable)
+{
 }
 
 void APlayerCharacter::OnRep_AttachWeapon()
@@ -770,12 +770,7 @@ void APlayerCharacter::SM_ReloadWeapon_Implementation()
 
 void APlayerCharacter::CS_GetPickupAmmo_Implementation(AAmmo* Ammo)
 {
-	SM_GetPickupAmmo(Ammo);
-}
-
-void APlayerCharacter::SM_GetPickupAmmo_Implementation(AAmmo* Ammo)
-{
-	Ammo->Destroy();
+	GetPickupAmmo(Ammo);
 }
 
 void APlayerCharacter::Die()

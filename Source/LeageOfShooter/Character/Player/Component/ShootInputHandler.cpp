@@ -49,13 +49,10 @@ void UShootInputHandler::SetupInputHandler(ABaseCharacter* MyCharacter, UInputCo
 	InputHandler->BindAction("AimingButton", IE_Released, this, &UShootInputHandler::AimingButtonReleased);
 
 	InputHandler->BindAction("Interactive", IE_Pressed, this, &UShootInputHandler::InteractiveButtonPressed);
-	InputHandler->BindAction("Interactive", IE_Released, this, &UShootInputHandler::InteractiveButtonReleased);
 
 	InputHandler->BindAction("Reload", IE_Pressed, this, &UShootInputHandler::ReloadButtonPressed);
-	InputHandler->BindAction("Reload", IE_Released, this, &UShootInputHandler::ReloadButtonReleased);
 
 	InputHandler->BindAction("Drop", IE_Pressed, this, &UShootInputHandler::DropButtonPressed);
-	InputHandler->BindAction("Drop", IE_Released, this, &UShootInputHandler::DropButtonReleased);
 }
 
 void UShootInputHandler::MoveForward(float Value)
@@ -256,14 +253,6 @@ void UShootInputHandler::InteractiveButtonPressed()
 	{
 		return;
 	}
-}
-
-void UShootInputHandler::InteractiveButtonReleased()
-{
-	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
-	{
-		return;
-	}
 
 	OwnerCharacter->InteractiveButtonPressed();
 }
@@ -278,14 +267,6 @@ void UShootInputHandler::DropButtonPressed()
 	OwnerCharacter->DropButtonPressed();
 }
 
-void UShootInputHandler::DropButtonReleased()
-{
-	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
-	{
-		return;
-	}
-}
-
 void UShootInputHandler::ReloadButtonPressed()
 {
 	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
@@ -294,12 +275,4 @@ void UShootInputHandler::ReloadButtonPressed()
 	}
 
 	OwnerCharacter->ReloadButtonPressed();
-}
-
-void UShootInputHandler::ReloadButtonReleased()
-{
-	if (!IsValid(OwnerCharacter) || OwnerCharacter->GetIsDie())
-	{
-		return;
-	}
 }
