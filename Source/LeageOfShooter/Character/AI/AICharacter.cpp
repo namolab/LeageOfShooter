@@ -77,8 +77,7 @@ void AAICharacter::StoreHitNumber(UUserWidget* HitNumber, FVector Location)
 	HitNumbers.Add(HitNumber, Location);
 
 	FTimerHandle HitNumberTimer;
-	FTimerDelegate HitNumberDelegate;
-	HitNumberDelegate.BindUFunction(this, FName("DestroyHitNumber"), HitNumber);
+	FTimerDelegate HitNumberDelegate = FTimerDelegate::CreateUObject(this, &AAICharacter::DestroyHitNumber, HitNumber);
 
 	GetWorld()->GetTimerManager().SetTimer(HitNumberTimer, HitNumberDelegate, HitNumberDestroyTime, false);
 }
