@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "LeageOfShooter/Character/BaseCharacter.h"
 #include "LeageOfShooter/Item/AmmoType.h"
+#include "LeageOfShooter/Item/Usable/Usable.h"
 #include "PlayerCharacter.generated.h"
 
 
@@ -69,7 +70,9 @@ public:
 
 	bool WeaponHasAmmo();
 	void FinishReload();
-	
+	void UseItem(FItemInfo ItemInfo);
+
+
 	void GetPickupItem(class AItem* Item);
 	void GetPickupAmmo(class AAmmo* Ammo);
 	void GetPickupUsable(class AUsable* Usable);
@@ -80,6 +83,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE class UShootInputHandler* GetInputHandler() const { return InputHandlerComponent; }
+	FORCEINLINE class UInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 	FORCEINLINE class USoundCue* GetFireSound() const { return FireSound; }
 	FORCEINLINE class UParticleSystem* GetFireParticle() const { return FireParticle; }
 	FORCEINLINE class UAnimMontage* GetHipFireMontage() const { return HipFireMontage; }
@@ -134,10 +138,11 @@ protected:
 	void CS_GetPickupAmmo(AAmmo* Ammo);
 
 	UFUNCTION(Server, Reliable)
-	void CS_GetPickupUsable(class AUsable* Usable);
+	void CS_DestroyUsable(class AUsable* Usable);
 
 	UFUNCTION(Server, Reliable)
-	void SM_GetPickupUsable(class AUsable* Usable);
+	void CS_UseItem(FItemInfo ItemInfo);
+	
 
 	UFUNCTION()
 	void FinishCrosshairBulletFire();
@@ -165,7 +170,7 @@ protected:
 	void SwapWeapon(ARangeWeapon* Weapon);
 	void StartCrosshairBulletFire();
 	void StartFireTimer();
-
+	void DestroyUsable(AUsable* Usable);
 
 private:
 	void UpdateCrouchCamLocation(float DeltaTime);
@@ -244,6 +249,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = InputComponent, meta = (AllowPrivateAccess = "true"))
 	class UShootInputHandler* InputHandlerComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = InputComponent, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* InventoryComponent;
 
 	UPROPERTY(Transient)
 	class USoundCue* FireSound;

@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "LeageOfShooter/Character/Player/Component/ShootInputHandler.h"
+#include "LeageOfShooter/Character/Player/Component/InventoryComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystem.h"
@@ -18,7 +19,6 @@
 #include "LeageOfShooter/Character/Player/Controller/ShootPlayerController.h"
 #include "LeageOfShooter/Item/Weapon/RangeWeapon.h"
 #include "LeageOfShooter/Item/Ammo/Ammo.h"
-#include "LeageOfShooter/Item/Usable/Usable.h"
 #include "LeageOfShooter/Interactive/InteractiveActor.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetWork.h"
@@ -48,6 +48,7 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false; 
 
 	InputHandlerComponent = CreateDefaultSubobject<UShootInputHandler>(TEXT("InputHandlerComponent"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	CameraZoomedFOV = 25.0f;
 	ZoomInterpSpeed = 20.0f;
@@ -597,6 +598,30 @@ void APlayerCharacter::FinishReload()
 	}
 }
 
+void APlayerCharacter::UseItem(FItemInfo ItemInfo)
+{
+	if (HasAuthority())
+	{
+		TArray<TSubclassOf<class UGameplayEffect>> ItemUsedEffect = ItemInfo.ItemUseEffect;
+
+		for (auto UseEffect : ItemUsedEffect)
+		{
+			if (IsValid(UseEffect) && !GetIsDie())
+			{
+				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
+				EffectContext.AddSourceObject(this);
+				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(UseEffect, 1, EffectContext);
+
+				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), this->GetAbilitySystemComponent());
+			}
+		}
+	}
+	else
+	{
+		CS_UseItem(ItemInfo);
+	}
+}
+
 void APlayerCharacter::GetPickupItem(AItem* Item)
 {
 	if (auto Weapon = Cast<ARangeWeapon>(Item))
@@ -639,15 +664,12 @@ void APlayerCharacter::GetPickupAmmo(AAmmo* Ammo)
 
 void APlayerCharacter::GetPickupUsable(AUsable* Usable)
 {
-	if (HasAuthority())
+	if (AShootPlayerController* PlayerController = Cast<AShootPlayerController>(GetController()))
 	{
-		Usable->Interact(this);
-		//SM_GetPickupUsable(Usable);
+		PlayerController->AddItemToInventoryWidget(Usable->GetItemInfo());
 	}
-	else
-	{
-		CS_GetPickupUsable(Usable);
-	}
+
+	DestroyUsable(Usable);
 }
 
 void APlayerCharacter::OnRep_AttachWeapon()
@@ -733,7 +755,9 @@ void APlayerCharacter::SM_HitDamage_Implementation(FHitResult HitResult, TSubcla
 				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
 
 				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorAI->GetAbilitySystemComponent());
-				HitActorAI->ShowHitNumber(AttributeSetComp->GetFireDamage(), HitResult.Location);
+			
+				if(IsValid(AttributeSetComp))
+					HitActorAI->ShowHitNumber(AttributeSetComp->GetFireDamage(), HitResult.Location);
 			}
 
 		}
@@ -795,14 +819,14 @@ void APlayerCharacter::CS_GetPickupAmmo_Implementation(AAmmo* Ammo)
 	GetPickupAmmo(Ammo);
 }
 
-void APlayerCharacter::CS_GetPickupUsable_Implementation(AUsable* Usable)
+void APlayerCharacter::CS_DestroyUsable_Implementation(AUsable* Usable)
 {
-	GetPickupUsable(Usable);
+	DestroyUsable(Usable);
 }
 
-void APlayerCharacter::SM_GetPickupUsable_Implementation(class AUsable* Usable)
+void APlayerCharacter::CS_UseItem_Implementation(FItemInfo ItemInfo)
 {
-	Usable->Interact(this);
+	UseItem(ItemInfo);
 }
 
 void APlayerCharacter::Die()
@@ -957,6 +981,18 @@ void APlayerCharacter::StartFireTimer()
 {
 	CombatState = EFireState::FireInProgress;
 	GetWorldTimerManager().SetTimer(AutoFireTimer, this, &APlayerCharacter::AutoFireReset, AutomaticFireRate, false);
+}
+
+void APlayerCharacter::DestroyUsable(AUsable* Usable)
+{
+	if (HasAuthority())
+	{
+		Usable->Interact(this);
+	}
+	else
+	{
+		CS_DestroyUsable(Usable);
+	}
 }
 
 void APlayerCharacter::AutoFireReset()

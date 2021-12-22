@@ -18,13 +18,5 @@ void AUsable::BeginPlay()
 
 void AUsable::Interact(APlayerCharacter* Player)
 {
-	if (IsValid(Player))
-	{
-		if (AShootPlayerController* PlayerController = Cast<AShootPlayerController>(Player->GetController()))
-		{
-			PlayerController->AddItemToInventoryWidget(ItemInfo);
-		}
-	}
-
 	Destroy();
 }

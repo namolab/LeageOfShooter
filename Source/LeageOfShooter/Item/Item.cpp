@@ -26,6 +26,7 @@ AItem::AItem()
 	ItemInfo.ItemName = FName(TEXT("Default"));
 	ItemState = EItemState::PickUp;
 	ItemCnt = 1;
+	ItemInfo.ItemClass = StaticClass();
 
 	bReplicates = true;
 	SetReplicateMovement(true);
