@@ -83,6 +83,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	TArray<FItemStat> ItemStat;
 
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* ItemMesh;*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	TArray<TSubclassOf<class UGameplayEffect>> ItemUseEffect;
 

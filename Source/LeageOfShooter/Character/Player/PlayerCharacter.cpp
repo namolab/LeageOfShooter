@@ -302,7 +302,7 @@ void APlayerCharacter::InteractiveButtonPressed()
 
 void APlayerCharacter::DropButtonPressed()
 {
-	DropItem();
+	DropEquipedItem();
 }
 
 void APlayerCharacter::ReloadButtonPressed()
@@ -511,19 +511,31 @@ void APlayerCharacter::EquipWeapon(ARangeWeapon* WeaponToEquip)
 	}
 }
 
-void APlayerCharacter::DropItem()
+void APlayerCharacter::DropEquipedItem()
 {
 	if (IsValid(EquippedWeapon))
 	{
 		if (HasAuthority())
 		{
-			SM_DropItem();
+			SM_DropEquipedItem();
 			EquippedWeapon = nullptr;
 		}
 		else
 		{
-			CS_DropItem();
+			CS_DropEquipedItem();
 		}
+	}
+}
+
+void APlayerCharacter::DropUsableItem(FItemInfo ItemInfo)
+{
+	if (HasAuthority())
+	{
+		GetWorld()->SpawnActor<AUsable>(ItemInfo.ItemClass, GetActorLocation(), FRotator(0.f));
+	}
+	else
+	{
+		CS_DropUsableItem(ItemInfo);
 	}
 }
 
@@ -779,12 +791,12 @@ void APlayerCharacter::CS_EquipWeapon_Implementation(ARangeWeapon* WeaponToEquip
 	EquipWeapon(WeaponToEquip);
 }
 
-void APlayerCharacter::CS_DropItem_Implementation()
+void APlayerCharacter::CS_DropEquipedItem_Implementation()
 {
-	DropItem();
+	DropEquipedItem();
 }
 
-void APlayerCharacter::SM_DropItem_Implementation()
+void APlayerCharacter::SM_DropEquipedItem_Implementation()
 {
 	if (IsValid(EquippedWeapon))
 	{
@@ -827,6 +839,11 @@ void APlayerCharacter::CS_DestroyUsable_Implementation(AUsable* Usable)
 void APlayerCharacter::CS_UseItem_Implementation(FItemInfo ItemInfo)
 {
 	UseItem(ItemInfo);
+}
+
+void APlayerCharacter::CS_DropUsableItem_Implementation(FItemInfo ItemInfo)
+{
+	DropUsableItem(ItemInfo);
 }
 
 void APlayerCharacter::Die()
@@ -960,7 +977,7 @@ void APlayerCharacter::SwapWeapon(ARangeWeapon* Weapon)
 {
 	if (IsValid(EquippedWeapon))
 	{
-		DropItem();
+		DropEquipedItem();
 	}
 
 	EquipWeapon(Weapon);

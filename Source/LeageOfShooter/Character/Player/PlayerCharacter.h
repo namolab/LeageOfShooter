@@ -63,7 +63,8 @@ public:
 
 	void EquipWeapon(ARangeWeapon* WeaponToEquip);
 
-	void DropItem();
+	void DropEquipedItem();
+	void DropUsableItem(FItemInfo ItemInfo);
 
 	UFUNCTION(BlueprintCallable)
 	void RefreshAmmoWidget();
@@ -125,9 +126,9 @@ protected:
 	void CS_EquipWeapon(ARangeWeapon* Weapon);
 
 	UFUNCTION(Server, Reliable)
-	void CS_DropItem();
+	void CS_DropEquipedItem();
 	UFUNCTION(NetMulticast, Reliable)
-	void SM_DropItem();
+	void SM_DropEquipedItem();
 
 	UFUNCTION(Server, Reliable)
 	void CS_ReloadWeapon();
@@ -143,6 +144,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void CS_UseItem(FItemInfo ItemInfo);
 	
+	UFUNCTION(Server, Reliable)
+	void CS_DropUsableItem(FItemInfo ItemInfo);
+
 
 	UFUNCTION()
 	void FinishCrosshairBulletFire();

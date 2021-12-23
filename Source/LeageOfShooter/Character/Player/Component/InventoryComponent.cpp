@@ -21,7 +21,11 @@ void UInventoryComponent::RemoveItemInfo(int32 RemoveIndex)
 
 void UInventoryComponent::DropItem(int32 DropIndex)
 {
-
+	if (IsValid(OwnerCharacter))
+	{
+		OwnerCharacter->DropUsableItem(InventoryItemArray[DropIndex]);
+		RemoveItemInfo(DropIndex);
+	}
 }
 
 void UInventoryComponent::UseItem(int32 UseIndex)
@@ -29,6 +33,7 @@ void UInventoryComponent::UseItem(int32 UseIndex)
 	if (IsValid(OwnerCharacter))
 	{
 		OwnerCharacter->UseItem(InventoryItemArray[UseIndex]);
+		RemoveItemInfo(UseIndex);
 	}
 }
 
@@ -37,9 +42,5 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<APlayerCharacter>(GetOwner());
-	if (IsValid(OwnerCharacter))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OwnerCharacter"));
-	}
 }
 
