@@ -3,6 +3,7 @@
 
 #include "ShootPlayerController.h"
 #include "LeageOfShooter/Character/Player/PlayerCharacter.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 AShootPlayerController::AShootPlayerController()
@@ -20,9 +21,10 @@ void AShootPlayerController::PlayerTick(float DeltaTime)
 void AShootPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (IsLocalController())
 	{
+
 		if (MainWidgetClass != nullptr)
 		{
 			MainWidget = CreateWidget<UUserWidget>(this, MainWidgetClass);
