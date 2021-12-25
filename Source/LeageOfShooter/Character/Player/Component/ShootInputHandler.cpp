@@ -9,7 +9,7 @@
 
 UShootInputHandler::UShootInputHandler()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = false;	
 }
 
 void UShootInputHandler::BeginPlay()

@@ -24,7 +24,6 @@ void AShootPlayerController::BeginPlay()
 	
 	if (IsLocalController())
 	{
-
 		if (MainWidgetClass != nullptr)
 		{
 			MainWidget = CreateWidget<UUserWidget>(this, MainWidgetClass);
