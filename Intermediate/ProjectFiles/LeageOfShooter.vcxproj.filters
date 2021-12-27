@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\LeageOfShooter.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{30D9E672-E064-4101-88C4-0B84E23E8B8E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\LeageOfShooter.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\LeageOfShooterEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.gitattributes" />
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\Game 소개 계획.txt" />
+    <None Include="..\..\Host_Server.bat" />
+    <None Include="..\..\Join_Client.bat" />
+    <None Include="..\..\ProjectPlan.txt" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{42F99004-8B12-433F-B810-0147D1AFC3A2}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGameplayTags.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Plugins">
+      <UniqueIdentifier>{BD9A018B-F773-4863-9FC6-0B8BBD87C22E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\AdvancedSessions">
+      <UniqueIdentifier>{BE116513-AC61-4C1A-A5C8-6490DBCCEF67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\AdvancedSessions\Source">
+      <UniqueIdentifier>{585DAF3D-7CF3-4E94-8436-685FA8299E6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions">
+      <UniqueIdentifier>{F90E31B4-CDF9-4845-8C54-41BAE92C7C3D}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\AdvancedSessions.Build.cs">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions\Classes">
+      <UniqueIdentifier>{FE2BCE04-0680-4BEF-9BF2-998C0D8477D2}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedExternalUILibrary.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedFriendsGameInstance.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedFriendsInterface.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedFriendsLibrary.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedGameSession.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedIdentityLibrary.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedSessions.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedSessionsLibrary.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedVoiceLibrary.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\BlueprintDataDefinitions.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\CancelFindSessionsCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\CreateSessionCallbackProxyAdvanced.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\EndSessionCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\FindFriendSessionCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\FindSessionsCallbackProxyAdvanced.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\GetFriendsCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\GetRecentPlayersCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\GetUserPrivilegeCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\LoginUserCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\LogoutUserCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\OnlineSubSystemHeader.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\SendFriendInviteCallbackProxy.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\UpdateSessionCallbackProxyAdvanced.h">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
+    </ClInclude>
+    <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions\Private">
+      <UniqueIdentifier>{F24DFB2C-3BC8-41EA-B978-5BCE33603464}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedExternalUILibrary.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedFriendsGameInstance.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedFriendsInterface.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedFriendsLibrary.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedIdentityLibrary.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedSessions.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedSessionsLibrary.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedVoiceLibrary.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\CancelFindSessionsCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\CreateSessionCallbackProxyAdvanced.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\EndSessionCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\FindFriendSessionCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\FindSessionsCallbackProxyAdvanced.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\GetFriendsCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\GetRecentPlayersCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\GetUserPrivilegeCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\LoginUserCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\LogoutUserCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\SendFriendInviteCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\UpdateSessionCallbackProxyAdvanced.cpp">
+      <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
+    </ClCompile>
+    <None Include="..\..\Plugins\AdvancedSessions\AdvancedSessions.uplugin">
+      <Filter>Plugins\AdvancedSessions</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSessions\Resources">
+      <UniqueIdentifier>{724E48DD-E4C9-4BF6-B0E0-42814575FD6E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Plugins\AdvancedSessions\Resources\Icon128.png">
+      <Filter>Plugins\AdvancedSessions\Resources</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSteamSessions">
+      <UniqueIdentifier>{E6CFC532-DA4B-4CAE-AB10-FBC06F3FA356}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Plugins\AdvancedSteamSessions\AdvancedSteamSessions.uplugin">
+      <Filter>Plugins\AdvancedSteamSessions</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSteamSessions\Resources">
+      <UniqueIdentifier>{7FFC5EFB-3EA2-462F-A1D8-05D8F6142529}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Plugins\AdvancedSteamSessions\Resources\Icon128.png">
+      <Filter>Plugins\AdvancedSteamSessions\Resources</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSteamSessions\Source">
+      <UniqueIdentifier>{E4EE2661-FB31-41D2-9D74-3FE323EF3316}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions">
+      <UniqueIdentifier>{AAE6C7AA-1FCA-435D-80E2-D22CECE11FF9}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\AdvancedSteamSessions.Build.cs">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions</Filter>
+    </None>
+    <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes">
+      <UniqueIdentifier>{0EE92F43-33AA-4EEC-AA06-B684291A1D67}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\AdvancedSteamFriendsLibrary.h">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\AdvancedSteamSessions.h">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\AdvancedSteamWorkshopLibrary.h">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\SteamRequestGroupOfficersCallbackProxy.h">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\SteamWSRequestUGCDetailsCallbackProxy.h">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
+    </ClInclude>
+    <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private">
+      <UniqueIdentifier>{F5F2A8A8-0971-40BA-93BA-8AF221CD4530}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\AdvancedSteamFriendsLibrary.cpp">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\AdvancedSteamSessions.cpp">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\AdvancedSteamWorkshopLibrary.cpp">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\SteamRequestGroupOfficersCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\SteamWSRequestUGCDetailsCallbackProxy.cpp">
+      <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\LeageOfShooter">
+      <UniqueIdentifier>{638F694F-07FB-4B9C-9EE0-647083C61F80}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\InteractableInterface.cpp">
+      <Filter>Source\LeageOfShooter</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\InteractableInterface.h">
+      <Filter>Source\LeageOfShooter</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\LeageOfShooter\LeageOfShooter.Build.cs">
+      <Filter>Source\LeageOfShooter</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\LeageOfShooter\LeageOfShooter.cpp">
+      <Filter>Source\LeageOfShooter</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\LeageOfShooter.h">
+      <Filter>Source\LeageOfShooter</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Ability">
+      <UniqueIdentifier>{0056962C-780C-42A1-8E43-27B131224FFA}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Ability\BaseGameplayAbility.cpp">
+      <Filter>Source\LeageOfShooter\Ability</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Ability\BaseGameplayAbility.h">
+      <Filter>Source\LeageOfShooter\Ability</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Ability\GA_Fire.cpp">
+      <Filter>Source\LeageOfShooter\Ability</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Ability\GA_Fire.h">
+      <Filter>Source\LeageOfShooter\Ability</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Attribute">
+      <UniqueIdentifier>{99ECEA4D-F95A-4040-B3FE-DEFA81C7333B}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Attribute\BaseAttributeSet.cpp">
+      <Filter>Source\LeageOfShooter\Attribute</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Attribute\BaseAttributeSet.h">
+      <Filter>Source\LeageOfShooter\Attribute</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character">
+      <UniqueIdentifier>{007BB0DA-C1BC-4B0D-B7F5-479F58D8D1EA}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\BaseCharacter.cpp">
+      <Filter>Source\LeageOfShooter\Character</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\BaseCharacter.h">
+      <Filter>Source\LeageOfShooter\Character</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\AI">
+      <UniqueIdentifier>{66EFF5AC-85B9-4096-94CB-499CEA444715}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\AICharacter.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\AICharacter.h">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Ai_Tags.h">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\BlackboardKey.h">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\KrakenAICharacter.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\KrakenAICharacter.h">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\TrollAI.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\TrollAI.h">
+      <Filter>Source\LeageOfShooter\Character\AI</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\AI\AnimNotify">
+      <UniqueIdentifier>{1B2ABA2C-6DD7-4743-B62E-4B29117A31D5}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\AnimNotify\MeleeAttackAnimNotify.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\AnimNotify</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\AnimNotify\MeleeAttackAnimNotify.h">
+      <Filter>Source\LeageOfShooter\Character\AI\AnimNotify</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\AI\Controller">
+      <UniqueIdentifier>{2A72CA4F-9D4D-4F13-BEC9-208CA2942EE5}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Controller\BaseAIController.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Controller\BaseAIController.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Controller\KrakenAIController.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Controller\KrakenAIController.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Controller\TrollAIController.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Controller\TrollAIController.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\AI\Task">
+      <UniqueIdentifier>{8780D645-607B-431A-A3B0-091A891675B9}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\AggroEnemy_BTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\AggroEnemy_BTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\AILightAttack_BTTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\AILightAttack_BTTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\ChasePlayer_BTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\ChasePlayer_BTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\FindPlayer_BTTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\FindPlayer_BTTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\FindRandomRocation_BTTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\FindRandomRocation_BTTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\InMeleeRange_BTService.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\InMeleeRange_BTService.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\StopInvestigate_BTTask.cpp">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AI\Task\StopInvestigate_BTTask.h">
+      <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\AnimInstance">
+      <UniqueIdentifier>{68FC1521-D51F-4448-A0C3-CC667C4E4F3C}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AnimInstance\AIAnimInstance.cpp">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AnimInstance\AIAnimInstance.h">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AnimInstance\KrakenAnimInstance.cpp">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AnimInstance\KrakenAnimInstance.h">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AnimInstance\PlayerAnimInstance.cpp">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AnimInstance\PlayerAnimInstance.h">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\AnimInstance\TrollAnimInstance.cpp">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\AnimInstance\TrollAnimInstance.h">
+      <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\NPC">
+      <UniqueIdentifier>{F5733ECC-AC43-4476-84A0-796F8573BDCF}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\NPC\NPCCharacter.cpp">
+      <Filter>Source\LeageOfShooter\Character\NPC</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\NPC\NPCCharacter.h">
+      <Filter>Source\LeageOfShooter\Character\NPC</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\Player">
+      <UniqueIdentifier>{9AAA03E4-BB17-4358-BA36-DA2370CDD919}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\PlayerCharacter.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\PlayerCharacter.h">
+      <Filter>Source\LeageOfShooter\Character\Player</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\Player\Component">
+      <UniqueIdentifier>{FBA9DA8B-10B7-4616-9994-1E1FF33723CD}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Component\InventoryComponent.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\Component\InventoryComponent.h">
+      <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Component\ShootInputHandler.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\Component\ShootInputHandler.h">
+      <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\Player\Controller">
+      <UniqueIdentifier>{90FC85F2-8E2C-4263-ACAC-4A1806C262B6}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Controller\BaseController.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\Controller\BaseController.h">
+      <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Controller\ShootPlayerController.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\Controller\ShootPlayerController.h">
+      <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Character\Player\Notify">
+      <UniqueIdentifier>{C3A95BCC-C8B6-45CD-87CF-CEC1AF34C39B}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Notify\FinishReloadNotify.cpp">
+      <Filter>Source\LeageOfShooter\Character\Player\Notify</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Character\Player\Notify\FinishReloadNotify.h">
+      <Filter>Source\LeageOfShooter\Character\Player\Notify</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Interactive">
+      <UniqueIdentifier>{254ABF85-FC84-4A94-8416-27FAF7B9082A}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\InteractiveActor.cpp">
+      <Filter>Source\LeageOfShooter\Interactive</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\InteractiveActor.h">
+      <Filter>Source\LeageOfShooter\Interactive</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\InteractiveDoor.cpp">
+      <Filter>Source\LeageOfShooter\Interactive</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\InteractiveDoor.h">
+      <Filter>Source\LeageOfShooter\Interactive</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Interactive\Spawner">
+      <UniqueIdentifier>{528AE053-DF34-456D-881E-3184DAB24B97}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\Spawner\AISpawner.cpp">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\Spawner\AISpawner.h">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\Spawner\BaseSpawner.cpp">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\Spawner\BaseSpawner.h">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\Spawner\ItemSpawner.cpp">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\Spawner\ItemSpawner.h">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\Spawner\WeaponSpawner.cpp">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Interactive\Spawner\WeaponSpawner.h">
+      <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Item">
+      <UniqueIdentifier>{EA511977-C109-4BC5-8831-670B39EFADBD}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\AmmoType.h">
+      <Filter>Source\LeageOfShooter\Item</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Item.cpp">
+      <Filter>Source\LeageOfShooter\Item</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Item.h">
+      <Filter>Source\LeageOfShooter\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\WeaponType.h">
+      <Filter>Source\LeageOfShooter\Item</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Item\Ammo">
+      <UniqueIdentifier>{D87E0E9C-5A9E-4560-8DA3-2DFD994E5BC7}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Ammo\Ammo.cpp">
+      <Filter>Source\LeageOfShooter\Item\Ammo</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Ammo\Ammo.h">
+      <Filter>Source\LeageOfShooter\Item\Ammo</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Item\Usable">
+      <UniqueIdentifier>{8C0E8790-D02B-40E6-A34F-AC1A72A7B8B9}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Usable\Usable.cpp">
+      <Filter>Source\LeageOfShooter\Item\Usable</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Usable\Usable.h">
+      <Filter>Source\LeageOfShooter\Item\Usable</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\Item\Weapon">
+      <UniqueIdentifier>{546F3BD5-8628-4C6A-B654-7DE42C46B20B}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Weapon\CloseWeapon.cpp">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Weapon\CloseWeapon.h">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Weapon\EnemysWeapon.cpp">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Weapon\EnemysWeapon.h">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Weapon\RangeWeapon.cpp">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Weapon\RangeWeapon.h">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\Item\Weapon\ThrowableWeapon.cpp">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\Item\Weapon\ThrowableWeapon.h">
+      <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\System">
+      <UniqueIdentifier>{55982AC1-FCE6-44BC-AF49-FB7959148DDA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LeageOfShooter\System\Data">
+      <UniqueIdentifier>{E7682812-8F66-4541-BEA5-0774659291EB}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\Data\ShooterDataAsset.cpp">
+      <Filter>Source\LeageOfShooter\System\Data</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\Data\ShooterDataAsset.h">
+      <Filter>Source\LeageOfShooter\System\Data</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\Data\ShooterDataManagerSubsystem.cpp">
+      <Filter>Source\LeageOfShooter\System\Data</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\Data\ShooterDataManagerSubsystem.h">
+      <Filter>Source\LeageOfShooter\System\Data</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\System\GameMode">
+      <UniqueIdentifier>{379E8167-437A-41F2-AE75-10B495AD8053}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\GameMode\MainMenuGameMode.cpp">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\GameMode\MainMenuGameMode.h">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\GameMode\MyGameModeBase.cpp">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\GameMode\MyGameModeBase.h">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\GameMode\PlayerGameMode.cpp">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\GameMode\PlayerGameMode.h">
+      <Filter>Source\LeageOfShooter\System\GameMode</Filter>
+    </ClInclude>
+    <Filter Include="Source\LeageOfShooter\System\Instance">
+      <UniqueIdentifier>{7845ED40-AAAF-40EA-BA56-75439FBE742D}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LeageOfShooter\System\Instance\LeageOfShooterGameInstance.cpp">
+      <Filter>Source\LeageOfShooter\System\Instance</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\LeageOfShooter\System\Instance\LeageOfShooterGameInstance.h">
+      <Filter>Source\LeageOfShooter\System\Instance</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
