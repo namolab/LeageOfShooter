@@ -293,6 +293,7 @@
     <None Include="..\..\Host_Server.bat"/>
     <None Include="..\..\Join_Client.bat"/>
     <None Include="..\..\ProjectPlan.txt"/>
+    <None Include="..\..\Uproject넣을코드.txt"/>
     <None Include="..\..\Config\DefaultEditor.ini"/>
     <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini"/>
     <None Include="..\..\Config\DefaultEngine.ini"/>

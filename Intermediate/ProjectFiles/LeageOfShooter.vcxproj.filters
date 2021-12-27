@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\LeageOfShooter.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{30D9E672-E064-4101-88C4-0B84E23E8B8E}</UniqueIdentifier>
+      <UniqueIdentifier>{FD669106-86C1-4F29-ADC9-7B5370725AD4}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\LeageOfShooter.Target.cs">
       <Filter>Source</Filter>
@@ -17,8 +17,9 @@
     <None Include="..\..\Host_Server.bat" />
     <None Include="..\..\Join_Client.bat" />
     <None Include="..\..\ProjectPlan.txt" />
+    <None Include="..\..\Uproject넣을코드.txt" />
     <Filter Include="Config">
-      <UniqueIdentifier>{42F99004-8B12-433F-B810-0147D1AFC3A2}</UniqueIdentifier>
+      <UniqueIdentifier>{A6FC71CE-83AA-4EFA-B636-95D6B445CB09}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -39,22 +40,22 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Plugins">
-      <UniqueIdentifier>{BD9A018B-F773-4863-9FC6-0B8BBD87C22E}</UniqueIdentifier>
+      <UniqueIdentifier>{E12A7475-B5B0-4378-81DE-B25F35B0B07D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\AdvancedSessions">
-      <UniqueIdentifier>{BE116513-AC61-4C1A-A5C8-6490DBCCEF67}</UniqueIdentifier>
+      <UniqueIdentifier>{60BF3805-547E-4E39-B530-37605E10870C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\AdvancedSessions\Source">
-      <UniqueIdentifier>{585DAF3D-7CF3-4E94-8436-685FA8299E6E}</UniqueIdentifier>
+      <UniqueIdentifier>{6F17A248-DE4D-4FB8-95AA-C9BA38BD4211}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions">
-      <UniqueIdentifier>{F90E31B4-CDF9-4845-8C54-41BAE92C7C3D}</UniqueIdentifier>
+      <UniqueIdentifier>{E423EB18-C181-4E6A-ADAC-3CFF977C54D4}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\AdvancedSessions.Build.cs">
       <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions\Classes">
-      <UniqueIdentifier>{FE2BCE04-0680-4BEF-9BF2-998C0D8477D2}</UniqueIdentifier>
+      <UniqueIdentifier>{87EE25C1-5324-4462-8865-E3471B6A5065}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Classes\AdvancedExternalUILibrary.h">
       <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
@@ -126,7 +127,7 @@
       <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Classes</Filter>
     </ClInclude>
     <Filter Include="Plugins\AdvancedSessions\Source\AdvancedSessions\Private">
-      <UniqueIdentifier>{F24DFB2C-3BC8-41EA-B978-5BCE33603464}</UniqueIdentifier>
+      <UniqueIdentifier>{BB755BF5-5B96-454E-A45F-C55E2661D357}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\AdvancedSessions\Source\AdvancedSessions\Private\AdvancedExternalUILibrary.cpp">
       <Filter>Plugins\AdvancedSessions\Source\AdvancedSessions\Private</Filter>
@@ -192,34 +193,34 @@
       <Filter>Plugins\AdvancedSessions</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSessions\Resources">
-      <UniqueIdentifier>{724E48DD-E4C9-4BF6-B0E0-42814575FD6E}</UniqueIdentifier>
+      <UniqueIdentifier>{5DBC44D6-8789-4F96-8D1C-A7D852127C70}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\AdvancedSessions\Resources\Icon128.png">
       <Filter>Plugins\AdvancedSessions\Resources</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSteamSessions">
-      <UniqueIdentifier>{E6CFC532-DA4B-4CAE-AB10-FBC06F3FA356}</UniqueIdentifier>
+      <UniqueIdentifier>{90256064-5EDA-4991-A4A7-68B5372B7D83}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\AdvancedSteamSessions\AdvancedSteamSessions.uplugin">
       <Filter>Plugins\AdvancedSteamSessions</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSteamSessions\Resources">
-      <UniqueIdentifier>{7FFC5EFB-3EA2-462F-A1D8-05D8F6142529}</UniqueIdentifier>
+      <UniqueIdentifier>{C154A025-6F6E-4268-9656-7245E701AAAB}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\AdvancedSteamSessions\Resources\Icon128.png">
       <Filter>Plugins\AdvancedSteamSessions\Resources</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSteamSessions\Source">
-      <UniqueIdentifier>{E4EE2661-FB31-41D2-9D74-3FE323EF3316}</UniqueIdentifier>
+      <UniqueIdentifier>{7EA4C8C1-A425-4663-8C8D-B176B1754DAB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions">
-      <UniqueIdentifier>{AAE6C7AA-1FCA-435D-80E2-D22CECE11FF9}</UniqueIdentifier>
+      <UniqueIdentifier>{6768A60A-628E-4A67-B4F9-713E9660750A}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\AdvancedSteamSessions.Build.cs">
       <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions</Filter>
     </None>
     <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes">
-      <UniqueIdentifier>{0EE92F43-33AA-4EEC-AA06-B684291A1D67}</UniqueIdentifier>
+      <UniqueIdentifier>{DFE2AA10-1CE5-43F8-8C7E-C0C7B248FCE8}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes\AdvancedSteamFriendsLibrary.h">
       <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
@@ -237,7 +238,7 @@
       <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Classes</Filter>
     </ClInclude>
     <Filter Include="Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private">
-      <UniqueIdentifier>{F5F2A8A8-0971-40BA-93BA-8AF221CD4530}</UniqueIdentifier>
+      <UniqueIdentifier>{94A45BBF-F929-4B8E-A3BB-251E5623355D}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private\AdvancedSteamFriendsLibrary.cpp">
       <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
@@ -255,7 +256,7 @@
       <Filter>Plugins\AdvancedSteamSessions\Source\AdvancedSteamSessions\Private</Filter>
     </ClCompile>
     <Filter Include="Source\LeageOfShooter">
-      <UniqueIdentifier>{638F694F-07FB-4B9C-9EE0-647083C61F80}</UniqueIdentifier>
+      <UniqueIdentifier>{0F6409A9-29A2-4EE4-AE13-17E811417199}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\InteractableInterface.cpp">
       <Filter>Source\LeageOfShooter</Filter>
@@ -273,7 +274,7 @@
       <Filter>Source\LeageOfShooter</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Ability">
-      <UniqueIdentifier>{0056962C-780C-42A1-8E43-27B131224FFA}</UniqueIdentifier>
+      <UniqueIdentifier>{DAB53E83-7AD9-45F1-B02E-FAE28BF6E8E0}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Ability\BaseGameplayAbility.cpp">
       <Filter>Source\LeageOfShooter\Ability</Filter>
@@ -288,7 +289,7 @@
       <Filter>Source\LeageOfShooter\Ability</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Attribute">
-      <UniqueIdentifier>{99ECEA4D-F95A-4040-B3FE-DEFA81C7333B}</UniqueIdentifier>
+      <UniqueIdentifier>{3E157136-4AB5-4AA5-9C4C-6F76547E0C6E}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Attribute\BaseAttributeSet.cpp">
       <Filter>Source\LeageOfShooter\Attribute</Filter>
@@ -297,7 +298,7 @@
       <Filter>Source\LeageOfShooter\Attribute</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character">
-      <UniqueIdentifier>{007BB0DA-C1BC-4B0D-B7F5-479F58D8D1EA}</UniqueIdentifier>
+      <UniqueIdentifier>{F74E4C6D-D4B7-4EB5-B2DF-64CAA1943ED8}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\BaseCharacter.cpp">
       <Filter>Source\LeageOfShooter\Character</Filter>
@@ -306,7 +307,7 @@
       <Filter>Source\LeageOfShooter\Character</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\AI">
-      <UniqueIdentifier>{66EFF5AC-85B9-4096-94CB-499CEA444715}</UniqueIdentifier>
+      <UniqueIdentifier>{D7955197-6078-44CF-9183-16FE622FBF20}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\AICharacter.cpp">
       <Filter>Source\LeageOfShooter\Character\AI</Filter>
@@ -333,7 +334,7 @@
       <Filter>Source\LeageOfShooter\Character\AI</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\AI\AnimNotify">
-      <UniqueIdentifier>{1B2ABA2C-6DD7-4743-B62E-4B29117A31D5}</UniqueIdentifier>
+      <UniqueIdentifier>{65ACE603-5060-4962-965C-B93765DC67DD}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\AnimNotify\MeleeAttackAnimNotify.cpp">
       <Filter>Source\LeageOfShooter\Character\AI\AnimNotify</Filter>
@@ -342,7 +343,7 @@
       <Filter>Source\LeageOfShooter\Character\AI\AnimNotify</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\AI\Controller">
-      <UniqueIdentifier>{2A72CA4F-9D4D-4F13-BEC9-208CA2942EE5}</UniqueIdentifier>
+      <UniqueIdentifier>{B7AEC047-63A0-4EFA-A47B-E8F77451E192}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Controller\BaseAIController.cpp">
       <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
@@ -363,7 +364,7 @@
       <Filter>Source\LeageOfShooter\Character\AI\Controller</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\AI\Task">
-      <UniqueIdentifier>{8780D645-607B-431A-A3B0-091A891675B9}</UniqueIdentifier>
+      <UniqueIdentifier>{C58D088E-E7D4-4B5D-B30C-70B2F6686057}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\AI\Task\AggroEnemy_BTask.cpp">
       <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
@@ -408,7 +409,7 @@
       <Filter>Source\LeageOfShooter\Character\AI\Task</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\AnimInstance">
-      <UniqueIdentifier>{68FC1521-D51F-4448-A0C3-CC667C4E4F3C}</UniqueIdentifier>
+      <UniqueIdentifier>{A7B6A947-5789-4C24-94FB-D9ED3AE1126D}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\AnimInstance\AIAnimInstance.cpp">
       <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
@@ -435,7 +436,7 @@
       <Filter>Source\LeageOfShooter\Character\AnimInstance</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\NPC">
-      <UniqueIdentifier>{F5733ECC-AC43-4476-84A0-796F8573BDCF}</UniqueIdentifier>
+      <UniqueIdentifier>{6EBCC0E7-ADCE-4EA7-B2A8-8C06FFBC1E30}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\NPC\NPCCharacter.cpp">
       <Filter>Source\LeageOfShooter\Character\NPC</Filter>
@@ -444,7 +445,7 @@
       <Filter>Source\LeageOfShooter\Character\NPC</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\Player">
-      <UniqueIdentifier>{9AAA03E4-BB17-4358-BA36-DA2370CDD919}</UniqueIdentifier>
+      <UniqueIdentifier>{D9339430-B17F-4254-8CDA-26C75D9F973F}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\PlayerCharacter.cpp">
       <Filter>Source\LeageOfShooter\Character\Player</Filter>
@@ -453,7 +454,7 @@
       <Filter>Source\LeageOfShooter\Character\Player</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\Player\Component">
-      <UniqueIdentifier>{FBA9DA8B-10B7-4616-9994-1E1FF33723CD}</UniqueIdentifier>
+      <UniqueIdentifier>{FFE3DD64-84F7-45D0-B82C-A89175D51177}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Component\InventoryComponent.cpp">
       <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
@@ -468,7 +469,7 @@
       <Filter>Source\LeageOfShooter\Character\Player\Component</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\Player\Controller">
-      <UniqueIdentifier>{90FC85F2-8E2C-4263-ACAC-4A1806C262B6}</UniqueIdentifier>
+      <UniqueIdentifier>{6B2F3ADE-8750-46F6-B763-D0DB5F2E253F}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Controller\BaseController.cpp">
       <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
@@ -483,7 +484,7 @@
       <Filter>Source\LeageOfShooter\Character\Player\Controller</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Character\Player\Notify">
-      <UniqueIdentifier>{C3A95BCC-C8B6-45CD-87CF-CEC1AF34C39B}</UniqueIdentifier>
+      <UniqueIdentifier>{4D6F843A-3B6D-4D5A-B845-EB6D6B827F91}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Character\Player\Notify\FinishReloadNotify.cpp">
       <Filter>Source\LeageOfShooter\Character\Player\Notify</Filter>
@@ -492,7 +493,7 @@
       <Filter>Source\LeageOfShooter\Character\Player\Notify</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Interactive">
-      <UniqueIdentifier>{254ABF85-FC84-4A94-8416-27FAF7B9082A}</UniqueIdentifier>
+      <UniqueIdentifier>{64410F3C-601A-4E36-AFDB-D58EFEA9416B}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\InteractiveActor.cpp">
       <Filter>Source\LeageOfShooter\Interactive</Filter>
@@ -507,7 +508,7 @@
       <Filter>Source\LeageOfShooter\Interactive</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Interactive\Spawner">
-      <UniqueIdentifier>{528AE053-DF34-456D-881E-3184DAB24B97}</UniqueIdentifier>
+      <UniqueIdentifier>{B136926C-0152-4456-8AA8-AF693A20CA62}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Interactive\Spawner\AISpawner.cpp">
       <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
@@ -534,7 +535,7 @@
       <Filter>Source\LeageOfShooter\Interactive\Spawner</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Item">
-      <UniqueIdentifier>{EA511977-C109-4BC5-8831-670B39EFADBD}</UniqueIdentifier>
+      <UniqueIdentifier>{F87AEF11-60C1-48CD-A514-7B6795483024}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\LeageOfShooter\Item\AmmoType.h">
       <Filter>Source\LeageOfShooter\Item</Filter>
@@ -549,7 +550,7 @@
       <Filter>Source\LeageOfShooter\Item</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Item\Ammo">
-      <UniqueIdentifier>{D87E0E9C-5A9E-4560-8DA3-2DFD994E5BC7}</UniqueIdentifier>
+      <UniqueIdentifier>{D6AE7575-007B-4967-BD1D-7BE676DC0BDE}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Item\Ammo\Ammo.cpp">
       <Filter>Source\LeageOfShooter\Item\Ammo</Filter>
@@ -558,7 +559,7 @@
       <Filter>Source\LeageOfShooter\Item\Ammo</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Item\Usable">
-      <UniqueIdentifier>{8C0E8790-D02B-40E6-A34F-AC1A72A7B8B9}</UniqueIdentifier>
+      <UniqueIdentifier>{48760341-D8B5-4FC7-BB40-08ED1313418A}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Item\Usable\Usable.cpp">
       <Filter>Source\LeageOfShooter\Item\Usable</Filter>
@@ -567,7 +568,7 @@
       <Filter>Source\LeageOfShooter\Item\Usable</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\Item\Weapon">
-      <UniqueIdentifier>{546F3BD5-8628-4C6A-B654-7DE42C46B20B}</UniqueIdentifier>
+      <UniqueIdentifier>{6237D52B-DDBF-4837-B0C5-A4B7C8EFDB0E}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\Item\Weapon\CloseWeapon.cpp">
       <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
@@ -594,10 +595,10 @@
       <Filter>Source\LeageOfShooter\Item\Weapon</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\System">
-      <UniqueIdentifier>{55982AC1-FCE6-44BC-AF49-FB7959148DDA}</UniqueIdentifier>
+      <UniqueIdentifier>{3C0596ED-06A8-441A-817A-7119A84989D5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\LeageOfShooter\System\Data">
-      <UniqueIdentifier>{E7682812-8F66-4541-BEA5-0774659291EB}</UniqueIdentifier>
+      <UniqueIdentifier>{C6240C3A-B168-4319-BEA8-F99C51043C12}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\System\Data\ShooterDataAsset.cpp">
       <Filter>Source\LeageOfShooter\System\Data</Filter>
@@ -612,7 +613,7 @@
       <Filter>Source\LeageOfShooter\System\Data</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\System\GameMode">
-      <UniqueIdentifier>{379E8167-437A-41F2-AE75-10B495AD8053}</UniqueIdentifier>
+      <UniqueIdentifier>{88F146EA-27E2-4B26-9EE4-FFE32E4E5E51}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\System\GameMode\MainMenuGameMode.cpp">
       <Filter>Source\LeageOfShooter\System\GameMode</Filter>
@@ -633,7 +634,7 @@
       <Filter>Source\LeageOfShooter\System\GameMode</Filter>
     </ClInclude>
     <Filter Include="Source\LeageOfShooter\System\Instance">
-      <UniqueIdentifier>{7845ED40-AAAF-40EA-BA56-75439FBE742D}</UniqueIdentifier>
+      <UniqueIdentifier>{3EC553F6-651B-4A0F-A5AD-65776FE43AA1}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LeageOfShooter\System\Instance\LeageOfShooterGameInstance.cpp">
       <Filter>Source\LeageOfShooter\System\Instance</Filter>
