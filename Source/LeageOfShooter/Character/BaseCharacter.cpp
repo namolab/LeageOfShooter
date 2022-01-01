@@ -128,7 +128,10 @@ void ABaseCharacter::OnHealthChangedFunc(const FOnAttributeChangeData& Data)
 
 void ABaseCharacter::Die()
 {
-
+	if (!HasAuthority())
+	{
+		return;
+	}
 }
 
 void ABaseCharacter::CallHealthChanged()

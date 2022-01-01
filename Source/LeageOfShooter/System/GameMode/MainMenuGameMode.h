@@ -14,4 +14,20 @@ class LEAGEOFSHOOTER_API AMainMenuGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AMainMenuGameMode();
+
+	UFUNCTION(BlueprintCallable)
+	class AShooterBeaconHostObject* GetBeaconHost();
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	bool CreateHostBeacon();
+
+private:
+	UPROPERTY(Transient)
+	class AShooterBeaconHostObject* HostObject;
+
+	UPROPERTY(Transient)
+	class AOnlineBeaconHost* Host;
 };

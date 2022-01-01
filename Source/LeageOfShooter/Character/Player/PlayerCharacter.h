@@ -114,7 +114,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void CS_HitDamage(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect);
 	UFUNCTION(NetMulticast, Reliable)
-	void SM_HitDamage(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect);
+	void SM_ShowHitNumber(AAICharacter* HitActorAI, FHitResult HitResult);
 
 	UFUNCTION(Server, Reliable)
 	void CS_SetAiming(bool WantsToAim);

@@ -349,6 +349,8 @@ void APlayerCharacter::FireWeapon()
 		CS_FireWeapon(BeamEnd, bBeamEnd);
 	}
 
+	StartCrosshairBulletFire();
+
 	EquippedWeapon->DecrementAmmo();
 
 	if (IsLocallyControlled())
@@ -700,6 +702,7 @@ void APlayerCharacter::OnRep_AttachWeapon()
 		}
 	}
 }
+
 void APlayerCharacter::OnRep_Die()
 {
 	if (DeadMontage.Num() > 0)
@@ -729,51 +732,13 @@ void APlayerCharacter::SM_FireWeapon_Implementation(const FVector& BeamEndParam,
 
 void APlayerCharacter::CS_HitDamage_Implementation(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect)
 {
-	SM_HitDamage(HitResult, DamageEffect);
+	HitDamage(HitResult, DamageEffect);
 }
 
-void APlayerCharacter::SM_HitDamage_Implementation(FHitResult HitResult, TSubclassOf<class UGameplayEffect> DamageEffect)
+void APlayerCharacter::SM_ShowHitNumber_Implementation(AAICharacter* HitActorAI, FHitResult HitResult)
 {
-	if (AActor* HitActor = HitResult.GetActor())
-	{
-		///////////////////////////////현재는 플레이어 끼리 데미지 입히는 구조////////////////////
-		if (APlayerCharacter* HitActorPlayer = Cast<APlayerCharacter>(HitActor))
-		{
-			if (HitActorPlayer->GetIsDie())
-			{
-				return;
-			}
-
-			if (IsValid(DamageEffect))
-			{
-				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
-				EffectContext.AddSourceObject(this);
-				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
-
-				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorPlayer->GetAbilitySystemComponent());
-			}
-		}
-		else if (AAICharacter* HitActorAI = Cast<AAICharacter>(HitActor))
-		{
-			if (HitActorAI->GetIsDie())
-			{
-				return;
-			}
-
-			if (IsValid(DamageEffect) && !HitActorAI->GetIsDie())
-			{
-				FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
-				EffectContext.AddSourceObject(this);
-				FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
-
-				AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorAI->GetAbilitySystemComponent());
-			
-				if(IsValid(AttributeSetComp))
-					HitActorAI->ShowHitNumber(AttributeSetComp->GetFireDamage(), HitResult.Location);
-			}
-
-		}
-	}
+	if (IsValid(AttributeSetComp))
+		HitActorAI->ShowHitNumber(AttributeSetComp->GetFireDamage(), HitResult.Location);
 }
 
 void APlayerCharacter::CS_SetAiming_Implementation(bool WantsToAim)
@@ -848,12 +813,11 @@ void APlayerCharacter::CS_DropUsableItem_Implementation(FItemInfo ItemInfo)
 
 void APlayerCharacter::Die()
 {
-	if (HasAuthority())
-	{
-		bIsDie = true;
-		OnRep_Die();
-	}
+	Super::Die();
 
+	bIsDie = true;
+	OnRep_Die();
+	
 	GetCharacterMovement()->DisableMovement();
 }
 
@@ -938,7 +902,6 @@ void APlayerCharacter::SendBullet(const FVector& BeamEndParam, bool bBeamEndPara
 			}
 		}
 	}
-	
 }
 
 void APlayerCharacter::PlayGunFireMontage()
@@ -949,8 +912,6 @@ void APlayerCharacter::PlayGunFireMontage()
 		AnimInstance->Montage_Play(HipFireMontage);
 		AnimInstance->Montage_JumpToSection(FName("StartFire"));
 	}
-
-	StartCrosshairBulletFire();
 }
 
 void APlayerCharacter::StartAim()
@@ -1115,7 +1076,27 @@ void APlayerCharacter::HitDamage(FHitResult HitResult, TSubclassOf<class UGamepl
 {
 	if (HasAuthority())
 	{
-		SM_HitDamage(HitResult, DamageEffect);
+		if (AActor* HitActor = HitResult.GetActor())
+		{
+			if (AAICharacter* HitActorAI = Cast<AAICharacter>(HitActor))
+			{
+				if (HitActorAI->GetIsDie())
+				{
+					return;
+				}
+
+				if (IsValid(DamageEffect) && !HitActorAI->GetIsDie())
+				{
+					FGameplayEffectContextHandle EffectContext = AbilitySystemComp->MakeEffectContext();
+					EffectContext.AddSourceObject(this);
+					FGameplayEffectSpecHandle SpecHandle = AbilitySystemComp->MakeOutgoingSpec(DamageEffect, 1, EffectContext);
+
+					AbilitySystemComp->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), HitActorAI->GetAbilitySystemComponent());
+					SM_ShowHitNumber(HitActorAI, HitResult);
+				}
+
+			}
+		}
 	}
 	else
 	{

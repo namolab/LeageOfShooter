@@ -141,11 +141,8 @@ void AAICharacter::Die()
 
 	VisibleHealthBar(false);
 
-	if (HasAuthority())
-	{
-		SM_EnemyDie();
-	}
-
+	SM_EnemyDie();
+	
 	DetachFromControllerPendingDestroy();
 	GetCharacterMovement()->SetAvoidanceEnabled(false);
 	GetCharacterMovement()->DisableMovement();
